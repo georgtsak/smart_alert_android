@@ -7,4 +7,6 @@
     <string name="create_account">Create Account</string>
     <string name="firstname">First Name</string>
     <string name="lastname">Last Name</string>
+    <string name="users">Registered Users</string>
+    <string name="employees">Social Protection Employees</string>
 </resources>
