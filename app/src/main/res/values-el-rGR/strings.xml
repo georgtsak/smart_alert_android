@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="email">Email</string>
+    <string name="password">Κωδικός Πρόσβασης</string>
+    <string name="log_in">Σύνδεση</string>
+    <string name="create_account">Εγγραφή</string>
+    <string name="firstname">Όνομα</string>
+    <string name="lastname">Επώνυμo</string>
+    <string name="users">Εγγεγραμμένοι Χρήστες</string>
+    <string name="employees">Υπάλληλοι πολιτικής προστασίας</string>
+</resources>
