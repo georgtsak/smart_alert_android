@@ -1,12 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.SmartAlert_p20191" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.SmartAlert_p20191" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/black</item> -->
     </style>
 
     <style name="Theme.SmartAlert_p20191" parent="Base.Theme.SmartAlert_p20191" />
 
-    <!--kyklikes gwnies-->
+    <!--kyklikes PANW gwnies-->
     <style name="custom2" parent="Widget.MaterialComponents.CardView">
         <item name="shapeAppearanceOverlay">@style/custom2_cardview</item>
     </style>
@@ -14,7 +13,22 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopRight">40dp</item>
         <item name="cornerSizeTopLeft">40dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+    <!--kyklikes OLES oi gwnies-->
+    <style name="custom3" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/custom3_cardview</item>
+    </style>
+    <style name="custom3_cardview" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">40dp</item>
+        <item name="cornerSizeTopLeft">40dp</item>
         <item name="cornerSizeBottomRight">40dp</item>
         <item name="cornerSizeBottomLeft">40dp</item>
+    </style>
+    <!--droplist gia ta eidh twn peristatikwn-->
+    <style name="spinner_style">
+        item name="
     </style>
 </resources>

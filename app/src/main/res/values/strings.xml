@@ -10,4 +10,6 @@
     <string name="users">Registered Users</string>
     <string name="employees">Social Protection Employees</string>
     <string name="hello">Hello</string>
+    <string name="comments">Comments</string>
+    <string name="send">Send</string>
 </resources>

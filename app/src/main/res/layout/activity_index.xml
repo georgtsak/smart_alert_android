@@ -56,14 +56,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/users"
                 android:layout_width="300dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="40dp"
-                android:backgroundTint="@color/darkred1"
+                android:background="@drawable/color_button"
                 android:onClick="users"
                 android:text="@string/users"
+                android:textColor="@color/white"
+                android:textStyle="bold"
                 app:cornerRadius="15dp"
                 app:layout_constraintBottom_toTopOf="@+id/employees"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -71,13 +73,15 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_marginBaseline="20dp" />
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/employees"
                 android:layout_width="300dp"
                 android:layout_height="48dp"
                 android:layout_marginBottom="200dp"
-                android:backgroundTint="@color/darkred1"
+                android:background="@drawable/color_button"
                 android:onClick="signup"
+                android:textColor="@color/white"
+                android:textStyle="bold"
                 android:text="@string/employees"
                 app:cornerRadius="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
