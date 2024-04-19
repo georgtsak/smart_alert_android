@@ -11,8 +11,11 @@
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.37" />
+        app:layout_constraintEnd_toStartOf="@+id/materialCardView"
+        app:layout_constraintGuide_percent="0.37"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!--<ImageView
         android:id="@+id/imageView"
@@ -42,15 +45,16 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView"
         style="@style/custom3"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginStart="10dp"
         android:layout_marginTop="150dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="9dp"
         android:layout_marginBottom="90dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline"
         app:layout_constraintVertical_bias="1.0">
@@ -58,13 +62,15 @@
         <androidx.constraintlayout.widget.ConstraintLayout
 
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="362dp">
 
             <Spinner
                 android:id="@+id/spinner1"
                 style="@style/spinner_style"
                 android:layout_width="300dp"
                 android:layout_height="44dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="15dp"
                 android:background="@drawable/custom1"
                 android:spinnerMode="dropdown"
                 app:layout_constraintBottom_toTopOf="@+id/comments"
@@ -72,10 +78,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
             <EditText
                 android:id="@+id/comments"
                 android:layout_width="300dp"
-                android:layout_height="44dp"
+                android:layout_height="88dp"
                 android:layout_marginBottom="15dp"
                 android:autofillHints=""
                 android:background="@drawable/custom1"
@@ -83,20 +90,60 @@
                 android:drawablePadding="5dp"
                 android:drawableTint="@color/darkred1"
                 android:ems="10"
-                android:hint="@string/comments"
+                android:hint="@string/comments_details"
                 android:inputType="text"
                 android:paddingStart="15dp"
                 android:textColor="@color/darkred1"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/relative_layout_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/spinner1" />
+
+            <RelativeLayout
+                android:id="@id/relative_layout_image"
+                android:layout_width="170dp"
+                android:layout_height="65dp"
+                android:layout_marginBottom="15dp"
+                app:layout_constraintBottom_toTopOf="@+id/button1"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:background="@drawable/custom1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/comments">
+
+                <TextView
+                    android:id="@+id/attachPhotoButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="20dp"
+                    android:text="Attach Photo:"
+                    android:textColor="@color/darkred1"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/photoImageView"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_toEndOf="@+id/attachPhotoButton"
+                    android:background="@color/gray3"
+                    android:padding="5dp"
+                    app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
+            </RelativeLayout>
+
 
             <android.widget.Button
                 android:id="@+id/button1"
                 android:layout_width="300dp"
                 android:layout_height="48dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="4dp"
                 android:background="@drawable/color_button"
                 android:text="@string/send"
                 android:textColor="@color/white"
@@ -104,11 +151,10 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/comments"
+                app:layout_constraintTop_toBottomOf="@+id/relative_layout_image"
                 app:layout_marginBaseline="20dp" />
 
+
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
     </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
