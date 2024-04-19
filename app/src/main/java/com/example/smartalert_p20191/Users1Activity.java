@@ -13,7 +13,7 @@ public class Users1Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.users1);
         Spinner dropdown = findViewById(R.id.spinner1);
-        String[] items = new String[]{"1", "2", "three"};
+        String[] items = new String[]{"Plummura", "Purkagia", "Seismos"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
     }

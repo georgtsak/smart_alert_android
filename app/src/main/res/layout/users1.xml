@@ -7,6 +7,19 @@
     android:background="@drawable/red"
     tools:context=".Users1Activity">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ηigh-Risk Incident Submission"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/materialCardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9" />
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
@@ -17,39 +30,14 @@
         app:layout_constraintGuide_percent="0.37"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!--<ImageView
-        android:id="@+id/imageView"
-        android:layout_width="74dp"
-        android:layout_height="62dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.40"
-        app:srcCompat="@drawable/baseline_person_24"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
-        android:text="@string/hello"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.19"/>-->
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView"
         style="@style/custom3"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_width="391dp"
+        android:layout_height="388dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="150dp"
-        android:layout_marginEnd="9dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="90dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -78,21 +66,21 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
             <EditText
                 android:id="@+id/comments"
                 android:layout_width="300dp"
-                android:layout_height="88dp"
+                android:layout_height="66dp"
                 android:layout_marginBottom="15dp"
                 android:autofillHints=""
                 android:background="@drawable/custom1"
-                android:drawableStart="@drawable/baseline_comment_24"
-                android:drawablePadding="5dp"
-                android:drawableTint="@color/darkred1"
-                android:ems="10"
+                android:gravity="top"
                 android:hint="@string/comments_details"
-                android:inputType="text"
-                android:paddingStart="15dp"
+                android:inputType="textMultiLine"
+                android:lines="3"
+                android:minLines="3"
+                android:padding="2dp"
+                android:paddingStart="7dp"
+                android:scrollbars="vertical"
                 android:textColor="@color/darkred1"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/relative_layout_image"
@@ -103,11 +91,11 @@
             <RelativeLayout
                 android:id="@id/relative_layout_image"
                 android:layout_width="170dp"
-                android:layout_height="65dp"
+                android:layout_height="66dp"
                 android:layout_marginBottom="15dp"
+                android:background="@drawable/custom1"
                 app:layout_constraintBottom_toTopOf="@+id/button1"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:background="@drawable/custom1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/comments">
 
