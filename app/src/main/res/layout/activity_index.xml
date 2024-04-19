@@ -42,15 +42,15 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView"
-        style="@style/custom2"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        style="@style/custom3"
+        android:layout_width="320dp"
+        android:layout_height="380dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toTopOf="@+id/guideline">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -58,7 +58,7 @@
 
             <android.widget.Button
                 android:id="@+id/users"
-                android:layout_width="300dp"
+                android:layout_width="280dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="40dp"
                 android:background="@drawable/color_button"
@@ -75,14 +75,14 @@
 
             <android.widget.Button
                 android:id="@+id/employees"
-                android:layout_width="300dp"
+                android:layout_width="280dp"
                 android:layout_height="48dp"
                 android:layout_marginBottom="200dp"
                 android:background="@drawable/color_button"
                 android:onClick="signup"
+                android:text="@string/employees"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:text="@string/employees"
                 app:cornerRadius="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -114,7 +114,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.503"
                 app:layout_constraintStart_toStartOf="parent" />-->
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

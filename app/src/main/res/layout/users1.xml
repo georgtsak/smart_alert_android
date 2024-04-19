@@ -8,10 +8,10 @@
     tools:context=".Users1Activity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/submission_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ηigh-Risk Incident Submission"
+        android:text="@string/submission_title"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -33,15 +33,14 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView"
         style="@style/custom3"
-        android:layout_width="391dp"
+        android:layout_width="320dp"
         android:layout_height="388dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="150dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginBottom="90dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline"
@@ -55,7 +54,7 @@
             <Spinner
                 android:id="@+id/spinner1"
                 style="@style/spinner_style"
-                android:layout_width="300dp"
+                android:layout_width="280dp"
                 android:layout_height="44dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="15dp"
@@ -68,7 +67,7 @@
 
             <EditText
                 android:id="@+id/comments"
-                android:layout_width="300dp"
+                android:layout_width="280dp"
                 android:layout_height="66dp"
                 android:layout_marginBottom="15dp"
                 android:autofillHints=""
@@ -90,7 +89,7 @@
 
             <RelativeLayout
                 android:id="@id/relative_layout_image"
-                android:layout_width="170dp"
+                android:layout_width="180dp"
                 android:layout_height="66dp"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/custom1"
@@ -105,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="5dp"
+                    android:layout_marginEnd="7dp"
                     android:layout_marginBottom="20dp"
                     android:text="Attach Photo:"
                     android:textColor="@color/darkred1"
@@ -115,7 +114,7 @@
                     android:id="@+id/photoImageView"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="7dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
@@ -128,7 +127,7 @@
 
             <android.widget.Button
                 android:id="@+id/button1"
-                android:layout_width="300dp"
+                android:layout_width="280dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginBottom="4dp"
