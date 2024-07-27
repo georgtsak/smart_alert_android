@@ -29,7 +29,7 @@ public class Users1Activity extends AppCompatActivity {
                 selectedFragment = new SubmissionFragment();
             } else if (itemId == R.id.statistics) {
                 selectedFragment = new StatisticsFragment();
-            } else if (itemId == R.id.language) {
+            } else if (itemId == R.id.settings) {
                 selectedFragment = new LanguageFragment();
             }
 

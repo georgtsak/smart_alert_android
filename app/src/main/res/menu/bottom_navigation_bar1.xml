@@ -9,7 +9,7 @@
         android:icon="@drawable/baseline_filter_list_24"
         android:title="@string/statistics"/>
     <item
-        android:id="@+id/language"
-        android:icon="@drawable/baseline_language_24"
-        android:title="@string/language"/>
+        android:id="@+id/settings"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="@string/settings"/>
 </menu>
