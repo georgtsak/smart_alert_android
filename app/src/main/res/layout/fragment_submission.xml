@@ -75,6 +75,7 @@
                 android:background="@drawable/custom1"
                 android:gravity="top"
                 android:hint="@string/comments_details"
+                android:textColorHint="@color/darkred1"
                 android:inputType="textMultiLine"
                 android:lines="3"
                 android:minLines="3"
