@@ -18,6 +18,7 @@
     <string name="statistics">Statistics</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logout">Log out</string>
     <string-array name="spinner_items">
         <item>Option 1</item>
         <item>Option 2</item>
