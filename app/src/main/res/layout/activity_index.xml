@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/red"
-    tools:context=".Index">
+    tools:context=".IndexActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -22,7 +22,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.40"
         app:srcCompat="@drawable/baseline_crisis_alert_24"/>
 
     <TextView
@@ -44,7 +43,7 @@
         android:id="@+id/materialCardView"
         style="@style/custom3"
         android:layout_width="320dp"
-        android:layout_height="380dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -54,13 +53,15 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp">
 
             <android.widget.Button
                 android:id="@+id/users"
                 android:layout_width="280dp"
                 android:layout_height="48dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginBottom="15dp"
                 android:background="@drawable/color_button"
                 android:onClick="users"
                 android:text="@string/users"
@@ -77,9 +78,8 @@
                 android:id="@+id/employees"
                 android:layout_width="280dp"
                 android:layout_height="48dp"
-                android:layout_marginBottom="200dp"
                 android:background="@drawable/color_button"
-                android:onClick="signup"
+                android:onClick="employees"
                 android:text="@string/employees"
                 android:textColor="@color/white"
                 android:textStyle="bold"

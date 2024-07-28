@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/red"
-    tools:context=".MainActivity">
+    tools:context=".AuthActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -22,7 +22,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.40"
         app:srcCompat="@drawable/baseline_crisis_alert_24"/>
 
     <TextView
@@ -74,6 +73,7 @@
                 android:drawableTint="@color/darkred1"
                 android:ems="10"
                 android:hint="@string/email"
+                android:textColorHint="@color/gray2"
                 android:inputType="text"
                 android:paddingStart="15dp"
                 android:textColor="@color/darkred1"
@@ -95,6 +95,7 @@
                 android:drawableTint="@color/darkred1"
                 android:ems="10"
                 android:hint="@string/firstname"
+                android:textColorHint="@color/gray2"
                 android:inputType="text"
                 android:paddingStart="15dp"
                 android:textColor="@color/darkred1"
@@ -116,6 +117,7 @@
                 android:drawableTint="@color/darkred1"
                 android:ems="10"
                 android:hint="@string/lastname"
+                android:textColorHint="@color/gray2"
                 android:inputType="text"
                 android:paddingStart="15dp"
                 android:textColor="@color/darkred1"
@@ -158,6 +160,7 @@
                 android:drawableTint="@color/darkred1"
                 android:ems="10"
                 android:hint="@string/password"
+                android:textColorHint="@color/gray2"
                 android:inputType="textPassword"
                 android:paddingStart="15dp"
                 android:textColor="@color/darkred1"
