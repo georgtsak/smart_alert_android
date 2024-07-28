@@ -110,7 +110,6 @@
                         android:layout_marginTop="10dp"
                         android:layout_toEndOf="@+id/darkMode1"
                         android:text="Dark Mode"
-                        android:textColor="@color/darkred1"
                         android:textStyle="bold" />
 
                     <Switch
@@ -147,7 +146,6 @@
                         android:layout_marginTop="10dp"
                         android:layout_toEndOf="@+id/Language1"
                         android:text="Greek"
-                        android:textColor="@color/darkred1"
                         android:textStyle="bold" />
 
                     <Switch
@@ -185,7 +183,6 @@
                         android:layout_marginTop="10dp"
                         android:layout_toEndOf="@+id/Location1"
                         android:text="Location"
-                        android:textColor="@color/darkred1"
                         android:textStyle="bold" />
 
                     <Switch
