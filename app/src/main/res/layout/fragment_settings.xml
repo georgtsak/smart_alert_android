@@ -116,8 +116,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:switchMinWidth="50dp"
-                        style="@style/custom_switch"/>
+                        style="@style/custom_switch"
+                        android:checked="false"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -153,8 +153,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:switchMinWidth="50dp"
-                        style="@style/custom_switch"/>
+                        style="@style/custom_switch"
+                        android:checked="false"/>
                 </RelativeLayout>
 
                 <!-- Location-->
@@ -191,8 +191,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:switchMinWidth="50dp"
-                        style="@style/custom_switch"/>
+                        style="@style/custom_switch"
+                        android:checked="false"/>
 
 
                 </RelativeLayout>
