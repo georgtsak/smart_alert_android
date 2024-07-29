@@ -193,7 +193,7 @@
                 android:layout_width="280dp"
                 android:layout_height="44dp"
                 android:background="@drawable/color_button"
-                android:onClick="create_account"
+                android:onClick="createAccount"
                 android:text="@string/create_account"
                 android:textColor="@color/white"
                 android:textStyle="bold"

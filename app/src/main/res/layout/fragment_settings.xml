@@ -43,6 +43,7 @@
             android:src="@drawable/baseline_account_circle_24" />
 
         <TextView
+            android:id="@+id/firstname_lastname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -53,6 +54,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

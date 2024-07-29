@@ -46,31 +46,42 @@ public class AuthActivity extends AppCompatActivity {
         }
 
         // Λειτουργία για την εγγραφή νέου χρήστη
-        createAccount.setOnClickListener(v -> create_account(email.getText().toString(), password.getText().toString()));
+        createAccount.setOnClickListener(v -> createAccount(email.getText().toString(), password.getText().toString()));
 
         // Λειτουργία για τη σύνδεση υπάρχοντος χρήστη
         loginButton.setOnClickListener(v -> login(email.getText().toString(), password.getText().toString()));
     }
 
-    private void create_account(String email, String password) {
+    private void createAccount(String email, String password) {
+        String firstNameInput = firstname.getText().toString().trim();
+        String lastNameInput = lastname.getText().toString().trim();
+
+        // Check if the first name and last name are provided
+        if (firstNameInput.isEmpty() || lastNameInput.isEmpty()) {
+            Toast.makeText(this, "Please enter first name and last name", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
-                        saveUserToFirestore(user);
+                        saveUserToFirestore(user, firstNameInput, lastNameInput);
                     } else {
                         Toast.makeText(AuthActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private void saveUserToFirestore(FirebaseUser firebaseUser) {
+    private void saveUserToFirestore(FirebaseUser firebaseUser, String firstname, String lastname) {
         String userId = firebaseUser.getUid();
         String email = firebaseUser.getEmail();
-        String role = "user";
+        String role = "user"; // default role
 
         Map<String, Object> user = new HashMap<>();
         user.put("email", email);
+        user.put("firstname", firstname);
+        user.put("lastname", lastname);
         user.put("role", role);
 
         DocumentReference documentReference = db.collection("users").document(userId);
