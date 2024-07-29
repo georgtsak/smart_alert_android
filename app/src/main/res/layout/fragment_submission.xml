@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/red"
-    tools:context=".Users1Activity">
+    tools:context=".UserActivity">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
