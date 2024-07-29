@@ -71,6 +71,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
             android:background="@drawable/color_button"
+            android:onClick="LogoutClick"
             android:text="@string/logout"
             android:textColor="@color/white"
             android:textStyle="bold" />

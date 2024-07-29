@@ -127,4 +127,8 @@ public class AuthActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> Toast.makeText(AuthActivity.this, "Failed to retrieve user role.", Toast.LENGTH_SHORT).show());
     }
+    public void logoutClick(View view){
+        LogoutActivity.logout(this);
+    }
+
 }
