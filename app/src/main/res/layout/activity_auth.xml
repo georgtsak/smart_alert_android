@@ -73,10 +73,10 @@
                 android:drawableTint="@color/darkred1"
                 android:ems="10"
                 android:hint="@string/email"
-                android:textColorHint="@color/gray2"
                 android:inputType="text"
                 android:paddingStart="15dp"
                 android:textColor="@color/darkred1"
+                android:textColorHint="@color/gray2"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/firstname"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -95,10 +95,10 @@
                 android:drawableTint="@color/darkred1"
                 android:ems="10"
                 android:hint="@string/firstname"
-                android:textColorHint="@color/gray2"
                 android:inputType="text"
                 android:paddingStart="15dp"
                 android:textColor="@color/darkred1"
+                android:textColorHint="@color/gray2"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/lastname"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -117,10 +117,10 @@
                 android:drawableTint="@color/darkred1"
                 android:ems="10"
                 android:hint="@string/lastname"
-                android:textColorHint="@color/gray2"
                 android:inputType="text"
                 android:paddingStart="15dp"
                 android:textColor="@color/darkred1"
+                android:textColorHint="@color/gray2"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/password"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -160,10 +160,10 @@
                 android:drawableTint="@color/darkred1"
                 android:ems="10"
                 android:hint="@string/password"
-                android:textColorHint="@color/gray2"
                 android:inputType="textPassword"
                 android:paddingStart="15dp"
                 android:textColor="@color/darkred1"
+                android:textColorHint="@color/gray2"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/button1"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -207,5 +207,21 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/switch_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:text="hghghghghghghg"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialCardView"
+        app:layout_constraintVertical_bias="0.25" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

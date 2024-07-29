@@ -2,9 +2,11 @@ package com.example.smartalert_p20191;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,8 +22,10 @@ import java.util.Map;
 public class AuthActivity extends AppCompatActivity {
     private EditText firstname, lastname, email, password;
     private Button createAccount, loginButton;
+    private TextView switchText;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private boolean isSignUpMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,48 +38,51 @@ public class AuthActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         createAccount = findViewById(R.id.button2);
         loginButton = findViewById(R.id.button1);
+        switchText = findViewById(R.id.switch_text);
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        boolean showFields = getIntent().getBooleanExtra("showFields", true);
-        if (!showFields) {
-            firstname.setVisibility(View.GONE);
-            lastname.setVisibility(View.GONE);
-            createAccount.setVisibility(View.GONE);
-        }
+        updateUIForAuthMode();
 
-        // Λειτουργία για την εγγραφή νέου χρήστη
-        createAccount.setOnClickListener(v -> createAccount(email.getText().toString(), password.getText().toString()));
+        createAccount.setOnClickListener(v -> createAccount());
 
-        // Λειτουργία για τη σύνδεση υπάρχοντος χρήστη
-        loginButton.setOnClickListener(v -> login(email.getText().toString(), password.getText().toString()));
+        loginButton.setOnClickListener(v -> login(email.getText().toString().trim(), password.getText().toString().trim()));
+
+        switchText.setOnClickListener(v -> {
+            isSignUpMode = !isSignUpMode;
+            updateUIForAuthMode();
+        });
     }
 
-    private void createAccount(String email, String password) {
+    private void createAccount() {
         String firstNameInput = firstname.getText().toString().trim();
         String lastNameInput = lastname.getText().toString().trim();
+        String emailInput = email.getText().toString().trim();
+        String passwordInput = password.getText().toString().trim();
 
-        // Check if the first name and last name are provided
         if (firstNameInput.isEmpty() || lastNameInput.isEmpty()) {
             Toast.makeText(this, "Please enter first name and last name", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        mAuth.createUserWithEmailAndPassword(email, password)
+        mAuth.createUserWithEmailAndPassword(emailInput, passwordInput)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
-                        saveUserToFirestore(user, firstNameInput, lastNameInput);
+                        if (user != null) {
+                            saveUser(user, firstNameInput, lastNameInput, emailInput, passwordInput);
+                            Toast.makeText(AuthActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
+                            login(emailInput, passwordInput); // apeutheias login meta to epituxhmeno register
+                        }
                     } else {
                         Toast.makeText(AuthActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private void saveUserToFirestore(FirebaseUser firebaseUser, String firstname, String lastname) {
+    private void saveUser(FirebaseUser firebaseUser, String firstname, String lastname, String email, String password) {
         String userId = firebaseUser.getUid();
-        String email = firebaseUser.getEmail();
         String role = "user"; // default role
 
         Map<String, Object> user = new HashMap<>();
@@ -87,10 +94,11 @@ public class AuthActivity extends AppCompatActivity {
         DocumentReference documentReference = db.collection("users").document(userId);
         documentReference.set(user)
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(AuthActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
-                    updateUI(firebaseUser);
+                    Log.e("AuthActivity", "User data successfully saved.");
                 })
-                .addOnFailureListener(e -> Toast.makeText(AuthActivity.this, "Failed to save user data.", Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> {
+                    Log.e("AuthActivity", "Failed to save user data.", e);
+                });
     }
 
     private void login(String email, String password) {
@@ -118,17 +126,27 @@ public class AuthActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         String role = documentSnapshot.getString("role");
-                        if ("user".equals(role)) {
-                            startActivity(new Intent(AuthActivity.this, UserActivity.class));
-                        } else if ("employee".equals(role)) {
-                            startActivity(new Intent(AuthActivity.this, EmployeeActivity.class));
-                        }
+                        Intent intent = role.equals("user") ? new Intent(AuthActivity.this, UserActivity.class) : new Intent(AuthActivity.this, EmployeeActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
                 })
                 .addOnFailureListener(e -> Toast.makeText(AuthActivity.this, "Failed to retrieve user role.", Toast.LENGTH_SHORT).show());
     }
-    public void logoutClick(View view){
-        LogoutActivity.logout(this);
-    }
 
+    private void updateUIForAuthMode() {
+        if (isSignUpMode) {
+            firstname.setVisibility(View.VISIBLE);
+            lastname.setVisibility(View.VISIBLE);
+            createAccount.setVisibility(View.VISIBLE);
+            loginButton.setVisibility(View.GONE);
+            switchText.setText("Έχετε ήδη λογαριασμό; Συνδεθείτε");
+        } else {
+            firstname.setVisibility(View.GONE);
+            lastname.setVisibility(View.GONE);
+            createAccount.setVisibility(View.GONE);
+            loginButton.setVisibility(View.VISIBLE);
+            switchText.setText("Δεν έχετε λογαριασμό; Δημιουργήστε έναν");
+        }
+    }
 }
