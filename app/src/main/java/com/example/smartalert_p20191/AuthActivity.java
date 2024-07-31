@@ -123,6 +123,7 @@ public class AuthActivity extends AppCompatActivity {
         String userId = user.getUid();
         DocumentReference documentReference = db.collection("users").document(userId);
         documentReference.get()
+                //diaforetiko redirect analoga me to role tou xrhsth
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         String role = documentSnapshot.getString("role");

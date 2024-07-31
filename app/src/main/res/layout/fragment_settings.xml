@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:text="Firstname Lastname"
+            android:text=""
             android:textColor="#fff"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="2dp"
-            android:text="name123example.com"
+            android:text=""
             android:textColor="#fff"
             android:textSize="15sp"
             android:textStyle="bold" />
