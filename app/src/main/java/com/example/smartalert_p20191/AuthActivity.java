@@ -71,19 +71,21 @@ public class AuthActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         if (user != null) {
-                            saveUser(user, firstNameInput, lastNameInput, emailInput, passwordInput);
+                            saveUser(user, firstNameInput, lastNameInput, emailInput);
                             Toast.makeText(AuthActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
-                            login(emailInput, passwordInput); // apeutheias login meta to epituxhmeno register
+                            login(emailInput, passwordInput); // Απευθείας login μετά την επιτυχημένη εγγραφή
                         }
                     } else {
-                        Toast.makeText(AuthActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                        String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
+                        Log.e("AuthActivity", "Authentication failed: " + errorMessage);
+                        Toast.makeText(AuthActivity.this, "Authentication failed: " + errorMessage, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private void saveUser(FirebaseUser firebaseUser, String firstname, String lastname, String email, String password) {
+    private void saveUser(FirebaseUser firebaseUser, String firstname, String lastname, String email) {
         String userId = firebaseUser.getUid();
-        String role = "user"; // default role
+        String role = "registered_user"; // default role gia olous tous neous xrhstes
 
         Map<String, Object> user = new HashMap<>();
         user.put("email", email);
@@ -93,13 +95,10 @@ public class AuthActivity extends AppCompatActivity {
 
         DocumentReference documentReference = db.collection("users").document(userId);
         documentReference.set(user)
-                .addOnSuccessListener(aVoid -> {
-                    Log.e("AuthActivity", "User data successfully saved.");
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("AuthActivity", "Failed to save user data.", e);
-                });
+                .addOnSuccessListener(aVoid -> Log.e("AuthActivity", "User data successfully saved."))
+                .addOnFailureListener(e -> Log.e("AuthActivity", "Failed to save user data.", e));
     }
+
 
     private void login(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
@@ -123,12 +122,14 @@ public class AuthActivity extends AppCompatActivity {
         String userId = user.getUid();
         DocumentReference documentReference = db.collection("users").document(userId);
         documentReference.get()
-                //diaforetiko redirect analoga me to role tou xrhsth
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         String role = documentSnapshot.getString("role");
-                        Intent intent = role.equals("user") ? new Intent(AuthActivity.this, UserActivity.class) : new Intent(AuthActivity.this, EmployeeActivity.class);
-                        startActivity(intent);
+                        if ("registered_user".equals(role)) {
+                            startActivity(new Intent(AuthActivity.this, UserActivity.class));
+                        } else if ("employee".equals(role)) {
+                            startActivity(new Intent(AuthActivity.this, EmployeeActivity.class));
+                        }
                         finish();
                     }
                 })
