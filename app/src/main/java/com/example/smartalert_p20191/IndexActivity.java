@@ -16,6 +16,7 @@ public class IndexActivity extends AppCompatActivity {
     // users --> ta emfanizei ola ( leitourgies: LOG-IN kai SIGN-UP)
     public void users(View view) {
         Intent intent = new Intent(this, AuthActivity.class);
+        intent.putExtra("role", "user");
         intent.putExtra("showFields", true);
         startActivity(intent);
     }
@@ -24,6 +25,7 @@ public class IndexActivity extends AppCompatActivity {
     // employees --> mono LOG-IN.
     public void employees(View view) {
         Intent intent = new Intent(this, AuthActivity.class);
+        intent.putExtra("role", "employee");
         intent.putExtra("showFields", false); // hide --> firstname, lastname και create account
         startActivity(intent);
     }

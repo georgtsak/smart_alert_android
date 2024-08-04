@@ -26,6 +26,7 @@ public class AuthActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private boolean isSignUpMode = false;
+    private String expectedRole;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,8 @@ public class AuthActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
+        expectedRole = getIntent().getStringExtra("role");
 
         updateUIForAuthMode();
 
@@ -100,6 +103,8 @@ public class AuthActivity extends AppCompatActivity {
     }
 
 
+    // prepei na valoyme 2 diaforetika login1 (koubi1) kai login2(koubi2)
+    // etsi wste na elegxoume role
     private void login(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
