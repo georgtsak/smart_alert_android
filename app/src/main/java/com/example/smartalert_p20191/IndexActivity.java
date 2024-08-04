@@ -16,7 +16,7 @@ public class IndexActivity extends AppCompatActivity {
     // users --> ta emfanizei ola ( leitourgies: LOG-IN kai SIGN-UP)
     public void users(View view) {
         Intent intent = new Intent(this, AuthActivity.class);
-        intent.putExtra("role", "user");
+        intent.putExtra("role", "registered_user");
         intent.putExtra("showFields", true);
         startActivity(intent);
     }

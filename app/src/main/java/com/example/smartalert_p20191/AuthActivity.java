@@ -26,7 +26,7 @@ public class AuthActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private boolean isSignUpMode = false;
-    private String expectedRole;
+    private String expected_role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class AuthActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-        expectedRole = getIntent().getStringExtra("role");
+        expected_role = getIntent().getStringExtra("role");
 
         updateUIForAuthMode();
 
@@ -130,10 +130,15 @@ public class AuthActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         String role = documentSnapshot.getString("role");
-                        if ("registered_user".equals(role)) {
-                            startActivity(new Intent(AuthActivity.this, UserActivity.class));
-                        } else if ("employee".equals(role)) {
-                            startActivity(new Intent(AuthActivity.this, EmployeeActivity.class));
+                        if (role.equals(expected_role)) {
+                            if ("registered_user".equals(role)) {
+                                startActivity(new Intent(AuthActivity.this, UserActivity.class));
+                            } else if ("employee".equals(role)) {
+                                startActivity(new Intent(AuthActivity.this, EmployeeActivity.class));
+                            }
+                        } else {
+                            Toast.makeText(AuthActivity.this, "Access denied for the role: " + expected_role, Toast.LENGTH_SHORT).show();
+                            mAuth.signOut(); // Αποσύνδεση του χρήστη
                         }
                         finish();
                     }
@@ -142,18 +147,26 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     private void updateUIForAuthMode() {
-        if (isSignUpMode) {
+        if ("employee".equals(expected_role)) {
+            firstname.setVisibility(View.GONE);
+            lastname.setVisibility(View.GONE);
+            createAccount.setVisibility(View.GONE);
+            loginButton.setVisibility(View.VISIBLE);
+            switchText.setVisibility(View.GONE);
+        } else if (isSignUpMode) {
             firstname.setVisibility(View.VISIBLE);
             lastname.setVisibility(View.VISIBLE);
             createAccount.setVisibility(View.VISIBLE);
             loginButton.setVisibility(View.GONE);
             switchText.setText("Έχετε ήδη λογαριασμό; Συνδεθείτε");
+            switchText.setVisibility(View.VISIBLE);
         } else {
             firstname.setVisibility(View.GONE);
             lastname.setVisibility(View.GONE);
             createAccount.setVisibility(View.GONE);
             loginButton.setVisibility(View.VISIBLE);
             switchText.setText("Δεν έχετε λογαριασμό; Δημιουργήστε έναν");
+            switchText.setVisibility(View.VISIBLE);
         }
     }
 }
