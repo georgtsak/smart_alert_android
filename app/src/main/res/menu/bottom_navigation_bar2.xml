@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/employee"
+        android:icon="@drawable/baseline_post_add_24"
+        android:title="@string/submission"/>
+    <item
+        android:id="@+id/statistics"
+        android:icon="@drawable/baseline_filter_list_24"
+        android:title="@string/statistics"/>
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="@string/settings"/>
+</menu>
