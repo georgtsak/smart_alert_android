@@ -40,7 +40,7 @@ public class EmployeeActivity extends AppCompatActivity {
         if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.Fragment1, fragment)
+                    .replace(R.id.Fragment2, fragment)
                     .commit();
             return true;
         }
