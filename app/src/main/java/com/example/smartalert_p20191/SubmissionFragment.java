@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+//insert sth firebase
+//eidos,comments,photo,timestamp
 public class SubmissionFragment extends Fragment {
     public SubmissionFragment() {
     }
