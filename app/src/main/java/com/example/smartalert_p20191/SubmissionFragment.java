@@ -35,8 +35,6 @@ import java.util.UUID;
 
 public class SubmissionFragment extends Fragment {
 
-    private static final int PICK_IMAGE_REQUEST = 1;
-
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
     private FirebaseStorage storage;
@@ -142,7 +140,7 @@ public class SubmissionFragment extends Fragment {
     private void saveEmergency(String type, String comments, String userId, @Nullable String imageUrl) {
         DatabaseReference reference = database.getReference("emergencies");
 
-        String id = reference.push().getKey(); // Generate a unique ID for the new entry
+        String id = reference.push().getKey();
 
         if (id != null) {
             Map<String, Object> emergency = new HashMap<>();
