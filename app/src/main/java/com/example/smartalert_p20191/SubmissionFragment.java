@@ -46,7 +46,7 @@ public class SubmissionFragment extends Fragment {
     private StorageReference storageReference;
 
     private Spinner spinner;
-    private EditText commentsEditText;
+    private EditText commentsEditText, loading1;
     private ImageView photoImageView;
     private Button submitButton;
 
@@ -55,6 +55,16 @@ public class SubmissionFragment extends Fragment {
     private double latitude;
     private double longitude;
 
+
+    // permission gia to storage
+    private final ActivityResultLauncher<String> requestStoragePermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    chooseImage();
+                } else {
+                    Toast.makeText(getContext(), "Storage permission denied", Toast.LENGTH_SHORT).show();
+                }
+            });
     private final ActivityResultLauncher<Intent> pickImageLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -110,7 +120,7 @@ public class SubmissionFragment extends Fragment {
         spinner.setAdapter(adapter);
 
         // image picker
-        photoImageView.setOnClickListener(v -> chooseImage());
+        photoImageView.setOnClickListener(v -> checkStoragePermission());
 
         // submit button
         submitButton.setOnClickListener(v -> submitEmergency());
@@ -121,12 +131,23 @@ public class SubmissionFragment extends Fragment {
         return view;
     }
 
+    // permission gia to location
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             getLocation();
         } else {
             requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+    }
+
+    // permission gia to storage
+    private void checkStoragePermission() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
+            chooseImage();
+        } else {
+            requestStoragePermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
         }
     }
 
