@@ -132,6 +132,7 @@ public class SubmissionFragment extends Fragment {
         ref.putFile(filePath)
                 .addOnSuccessListener(taskSnapshot -> ref.getDownloadUrl().addOnSuccessListener(uri -> {
                     saveEmergency(type, comments, userId, uri.toString());
+                    Toast.makeText(getContext(), "Emergency submitted successfully", Toast.LENGTH_SHORT).show();
                 }))
                 .addOnFailureListener(e -> {
                     Toast.makeText(getContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
