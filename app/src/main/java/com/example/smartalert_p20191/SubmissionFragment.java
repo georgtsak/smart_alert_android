@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -49,6 +50,8 @@ public class SubmissionFragment extends Fragment {
     private EditText commentsEditText, loading1;
     private ImageView photoImageView;
     private Button submitButton;
+    private TextView loadingText;
+
 
     private Uri filePath;
     private FusedLocationProviderClient fusedLocationClient;
@@ -112,6 +115,7 @@ public class SubmissionFragment extends Fragment {
         commentsEditText = view.findViewById(R.id.comments);
         photoImageView = view.findViewById(R.id.photoImageView);
         submitButton = view.findViewById(R.id.button1);
+        loadingText = view.findViewById(R.id.loading1);
 
         // spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
@@ -180,6 +184,8 @@ public class SubmissionFragment extends Fragment {
             return;
         }
 
+        loadingText.setText("Loading...");
+
         if (filePath != null) {
             uploadImageAndSaveEmergency(selectedItem, commentText, userId);
         } else {
@@ -197,6 +203,7 @@ public class SubmissionFragment extends Fragment {
                 }))
                 .addOnFailureListener(e -> {
                     Toast.makeText(getContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
+                    loadingText.setText("");
                 });
     }
 
@@ -220,7 +227,8 @@ public class SubmissionFragment extends Fragment {
             reference.child(id).setValue(emergency)
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(getContext(), "Emergency submitted successfully", Toast.LENGTH_SHORT).show();
-                        // Clear fields after submission
+                        loadingText.setText("");
+                        // katharismos
                         spinner.setSelection(0);
                         commentsEditText.setText("");
                         photoImageView.setImageResource(R.drawable.baseline_add_photo_alternate_24);
@@ -228,6 +236,7 @@ public class SubmissionFragment extends Fragment {
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(getContext(), "Failed to submit emergency", Toast.LENGTH_SHORT).show();
+                        loadingText.setText("");
                     });
         }
     }
