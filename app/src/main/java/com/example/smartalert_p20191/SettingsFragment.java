@@ -1,13 +1,17 @@
 package com.example.smartalert_p20191;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,6 +25,7 @@ public class SettingsFragment extends Fragment {
     private TextView Name1, Email;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private Switch locationSwitch;
 
     @Nullable
     @Override
@@ -29,6 +34,7 @@ public class SettingsFragment extends Fragment {
 
         Name1 = view.findViewById(R.id.firstname_lastname);
         Email = view.findViewById(R.id.email);
+        locationSwitch = view.findViewById(R.id.locationSwitch);
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -37,6 +43,8 @@ public class SettingsFragment extends Fragment {
         if (user != null) {
             loadUserData(user.getUid());
         }
+
+        updateLocationSwitch();
 
         return view;
     }
@@ -60,5 +68,14 @@ public class SettingsFragment extends Fragment {
                 // handle task failure
             }
         });
+    }
+
+    private void updateLocationSwitch() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationSwitch.setChecked(true);
+        } else {
+            locationSwitch.setChecked(false);
+        }
+
     }
 }
