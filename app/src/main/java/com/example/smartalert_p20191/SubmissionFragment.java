@@ -1,7 +1,9 @@
 package com.example.smartalert_p20191;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,8 +22,11 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -41,11 +46,14 @@ public class SubmissionFragment extends Fragment {
     private StorageReference storageReference;
 
     private Spinner spinner;
-    private EditText comments;
+    private EditText commentsEditText;
     private ImageView photoImageView;
     private Button submitButton;
 
     private Uri filePath;
+    private FusedLocationProviderClient fusedLocationClient;
+    private double latitude;
+    private double longitude;
 
     private final ActivityResultLauncher<Intent> pickImageLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -63,6 +71,16 @@ public class SubmissionFragment extends Fragment {
             }
     );
 
+    // permission gia to location
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    getLocation();
+                } else {
+                    Toast.makeText(getContext(), "Location permission denied", Toast.LENGTH_SHORT).show();
+                }
+            });
+
     public SubmissionFragment() {
     }
 
@@ -73,30 +91,55 @@ public class SubmissionFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_submission, container, false);
 
-        // Initialize Firebase Auth, Realtime Database, and Storage
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+
         spinner = view.findViewById(R.id.spinner1);
-        comments = view.findViewById(R.id.comments);
+        commentsEditText = view.findViewById(R.id.comments);
         photoImageView = view.findViewById(R.id.photoImageView);
         submitButton = view.findViewById(R.id.button1);
 
-        // Set up spinner
+        // spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
                 R.array.spinner_items, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        // Set up photo selection
+        // image picker
         photoImageView.setOnClickListener(v -> chooseImage());
 
-        // Set up button click listener
+        // submit button
         submitButton.setOnClickListener(v -> submitEmergency());
 
+        // location permission
+        checkLocationPermission();
+
         return view;
+    }
+
+    private void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            getLocation();
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+    }
+
+    private void getLocation() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(location -> {
+                        if (location != null) {
+                            latitude = location.getLatitude();
+                            longitude = location.getLongitude();
+                        }
+                    });
+        }
     }
 
     private void chooseImage() {
@@ -108,7 +151,7 @@ public class SubmissionFragment extends Fragment {
 
     private void submitEmergency() {
         String selectedItem = spinner.getSelectedItem().toString();
-        String commentText = comments.getText().toString().trim();
+        String commentText = commentsEditText.getText().toString().trim();
         String userId = mAuth.getCurrentUser().getUid();
 
         if (commentText.isEmpty()) {
@@ -130,7 +173,6 @@ public class SubmissionFragment extends Fragment {
         ref.putFile(filePath)
                 .addOnSuccessListener(taskSnapshot -> ref.getDownloadUrl().addOnSuccessListener(uri -> {
                     saveEmergency(type, comments, userId, uri.toString());
-                    Toast.makeText(getContext(), "Emergency submitted successfully", Toast.LENGTH_SHORT).show();
                 }))
                 .addOnFailureListener(e -> {
                     Toast.makeText(getContext(), "Failed to upload image", Toast.LENGTH_SHORT).show();
@@ -148,6 +190,8 @@ public class SubmissionFragment extends Fragment {
             emergency.put("comments", comments);
             emergency.put("userId", userId);
             emergency.put("timestamp", System.currentTimeMillis());
+            emergency.put("latitude", latitude);
+            emergency.put("longitude", longitude);
             if (imageUrl != null) {
                 emergency.put("imageUrl", imageUrl);
             }
@@ -157,7 +201,7 @@ public class SubmissionFragment extends Fragment {
                         Toast.makeText(getContext(), "Emergency submitted successfully", Toast.LENGTH_SHORT).show();
                         // Clear fields after submission
                         spinner.setSelection(0);
-                        //comments.setText("");
+                        commentsEditText.setText("");
                         photoImageView.setImageResource(R.drawable.baseline_add_photo_alternate_24);
                         filePath = null;
                     })
