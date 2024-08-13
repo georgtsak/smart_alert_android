@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,21 +46,20 @@ public class SubmissionFragment extends Fragment {
     private FirebaseDatabase database;
     private FirebaseStorage storage;
     private StorageReference storageReference;
+    private FusedLocationProviderClient fusedLocationClient;
 
     private Spinner spinner;
-    private EditText commentsEditText, loading1;
+    private EditText commentsEditText;
     private ImageView photoImageView;
     private Button submitButton;
     private TextView loadingText;
-
+    private Switch locationSwitch; // Add this
 
     private Uri filePath;
-    private FusedLocationProviderClient fusedLocationClient;
     private double latitude;
     private double longitude;
 
-
-    // permission gia to storage
+    // Permission for storage
     private final ActivityResultLauncher<String> requestStoragePermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
@@ -68,6 +68,7 @@ public class SubmissionFragment extends Fragment {
                     Toast.makeText(getContext(), "Storage permission denied", Toast.LENGTH_SHORT).show();
                 }
             });
+
     private final ActivityResultLauncher<Intent> pickImageLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -84,7 +85,7 @@ public class SubmissionFragment extends Fragment {
             }
     );
 
-    // permission gia to location
+    // Permission for location
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
@@ -108,7 +109,6 @@ public class SubmissionFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
         spinner = view.findViewById(R.id.spinner1);
@@ -116,26 +116,27 @@ public class SubmissionFragment extends Fragment {
         photoImageView = view.findViewById(R.id.photoImageView);
         submitButton = view.findViewById(R.id.button1);
         loadingText = view.findViewById(R.id.loading1);
+        locationSwitch = view.findViewById(R.id.locationSwitch);
 
-        // spinner
+        // Set up spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
                 R.array.spinner_items, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        // image picker
+        // Set up image picker
         photoImageView.setOnClickListener(v -> checkStoragePermission());
 
-        // submit button
+        // Set up submit button
         submitButton.setOnClickListener(v -> submitEmergency());
 
-        // location permission
+        // Initialize location permission
         checkLocationPermission();
 
         return view;
     }
 
-    // permission gia to location
+    // Check location permission
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -145,7 +146,7 @@ public class SubmissionFragment extends Fragment {
         }
     }
 
-    // permission gia to storage
+    // Check storage permission
     private void checkStoragePermission() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -184,12 +185,16 @@ public class SubmissionFragment extends Fragment {
             return;
         }
 
-        loadingText.setText("Loading...");
+        if (locationSwitch.isChecked()) {
+            loadingText.setText("Loading...");
 
-        if (filePath != null) {
-            uploadImageAndSaveEmergency(selectedItem, commentText, userId);
+            if (filePath != null) {
+                uploadImageAndSaveEmergency(selectedItem, commentText, userId);
+            } else {
+                saveEmergency(selectedItem, commentText, userId, null);
+            }
         } else {
-            saveEmergency(selectedItem, commentText, userId, null);
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
         }
     }
 
@@ -228,7 +233,7 @@ public class SubmissionFragment extends Fragment {
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(getContext(), "Emergency submitted successfully", Toast.LENGTH_SHORT).show();
                         loadingText.setText("");
-                        // katharismos
+                        // Clear fields
                         spinner.setSelection(0);
                         commentsEditText.setText("");
                         photoImageView.setImageResource(R.drawable.baseline_add_photo_alternate_24);
