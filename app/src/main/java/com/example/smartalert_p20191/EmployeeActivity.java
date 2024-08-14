@@ -10,23 +10,23 @@ public class EmployeeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user);
+        setContentView(R.layout.activity_employee);
 
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         // Set default fragment
         if (savedInstanceState == null) {
-            loadFragment(new SubmissionFragment());
+            loadFragment(new RequestsFragment());
         }
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
             int itemId = item.getItemId();
 
-            if (itemId == R.id.employee)
+            if (itemId == R.id.requests)
             {
-                selectedFragment = new SubmissionFragment();
+                selectedFragment = new RequestsFragment();
             } else if (itemId == R.id.statistics) {
                 selectedFragment = new StatisticsFragment();
             } else if (itemId == R.id.settings) {

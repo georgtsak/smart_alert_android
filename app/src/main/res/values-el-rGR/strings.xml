@@ -9,4 +9,7 @@
     <string name="users">Εγγεγραμμένοι Χρήστες</string>
     <string name="employees">Υπάλληλοι πολιτικής προστασίας</string>
     <string name="settings">Ρυθμίσεις</string>
+    <string name="requests">Αιτήματα</string>
+    <string name="logout">Αποσύνδεση</string>
+
 </resources>
