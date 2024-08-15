@@ -2,12 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/requests"
-        android:icon="@drawable/baseline_emergency_share_24"
+        android:icon="@drawable/baseline_format_list_bulleted_24"
         android:title="@string/requests"/>
     <item
-        android:id="@+id/statistics"
+        android:id="@+id/confirmed"
         android:icon="@drawable/baseline_emergency_24"
-        android:title="@string/statistics"/>
+        android:title="@string/confirmed"/>
+    <item
+        android:id="@+id/alerts"
+        android:icon="@drawable/baseline_emergency_share_24"
+        android:title="@string/alerts"/>
     <item
         android:id="@+id/settings"
         android:icon="@drawable/baseline_settings_24"

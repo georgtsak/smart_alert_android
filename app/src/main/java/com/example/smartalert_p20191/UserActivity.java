@@ -29,6 +29,8 @@ public class UserActivity extends AppCompatActivity {
                 selectedFragment = new SubmissionFragment();
             } else if (itemId == R.id.statistics) {
                 selectedFragment = new StatisticsFragment();
+            } else if (itemId == R.id.myalerts) {
+                selectedFragment = new MyAlertsFragment();
             } else if (itemId == R.id.settings) {
                 selectedFragment = new SettingsFragment();
             }

@@ -27,8 +27,10 @@ public class EmployeeActivity extends AppCompatActivity {
             if (itemId == R.id.requests)
             {
                 selectedFragment = new RequestsFragment();
-            } else if (itemId == R.id.statistics) {
-                selectedFragment = new StatisticsFragment();
+            } else if (itemId == R.id.confirmed) {
+                selectedFragment = new ConfirmedFragment();
+            } else if (itemId == R.id.alerts) {
+                selectedFragment = new AlertsFragment();
             } else if (itemId == R.id.settings) {
                 selectedFragment = new SettingsFragment();
             }

@@ -9,6 +9,10 @@
         android:icon="@drawable/baseline_filter_list_24"
         android:title="@string/statistics"/>
     <item
+        android:id="@+id/myalerts"
+        android:icon="@drawable/baseline_emergency_share_24"
+        android:title="@string/myalerts"/>
+    <item
         android:id="@+id/settings"
         android:icon="@drawable/baseline_settings_24"
         android:title="@string/settings"/>
