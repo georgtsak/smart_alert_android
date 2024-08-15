@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -26,6 +28,9 @@ public class SettingsFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private Switch locationSwitch;
+    private Button ButtonBlue;
+    private ImageView darkMode1, Language1, Location1;
+
 
     @Nullable
     @Override
@@ -35,6 +40,11 @@ public class SettingsFragment extends Fragment {
         Name1 = view.findViewById(R.id.firstname_lastname);
         Email = view.findViewById(R.id.email);
         locationSwitch = view.findViewById(R.id.locationSwitch);
+        ButtonBlue = view.findViewById(R.id.logout_button);
+        darkMode1 = view.findViewById(R.id.darkMode1);
+        Language1 = view.findViewById(R.id.Language1);
+        Location1 = view.findViewById(R.id.Location1);
+
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -66,9 +76,12 @@ public class SettingsFragment extends Fragment {
                     String firstname = document.getString("firstname");
                     String lastname = document.getString("lastname");
                     String email = document.getString("email");
+                    String role = document.getString("role");
 
                     Name1.setText(firstname + " " + lastname);
                     Email.setText(email);
+                    updateBg(role);
+
                 } else {
                     // handle case where document does not exist
                 }
@@ -83,6 +96,21 @@ public class SettingsFragment extends Fragment {
             locationSwitch.setChecked(true);
         } else {
             locationSwitch.setChecked(false);
+        }
+    }
+
+    private void updateBg(String role) {
+        if ("registered_user".equals(role)) {
+            ButtonBlue.setBackgroundResource(R.drawable.color_red_button);
+            darkMode1.setBackgroundResource(R.drawable.bg_red_radius);
+            Language1.setBackgroundResource(R.drawable.bg_red_radius);
+            Location1.setBackgroundResource(R.drawable.bg_red_radius);
+        } else if ("employee".equals(role)) {
+            ButtonBlue.setBackgroundResource(R.drawable.color_blue_button);
+            darkMode1.setBackgroundResource(R.drawable.bg_blue_radius);
+            Language1.setBackgroundResource(R.drawable.bg_blue_radius);
+            Location1.setBackgroundResource(R.drawable.bg_blue_radius);
+
         }
     }
 }

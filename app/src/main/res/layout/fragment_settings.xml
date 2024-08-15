@@ -68,11 +68,12 @@
 
 
         <android.widget.Button
+            android:id="@+id/logout_button"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
-            android:background="@drawable/color_button"
+            android:background="@drawable/color_red_button"
             android:onClick="LogoutClick"
             android:text="@string/logout"
             android:textColor="@color/white"
@@ -104,7 +105,7 @@
                         android:id="@+id/darkMode1"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@drawable/bg_radius"
+                        android:background="@drawable/bg_red_radius"
                         android:padding="10dp"
                         android:src="@drawable/baseline_dark_mode_24" />
 
@@ -118,6 +119,7 @@
                         android:textStyle="bold" />
 
                     <Switch
+                        android:id="@+id/DarkModeSwitch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -140,7 +142,7 @@
                         android:id="@+id/Language1"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@drawable/bg_radius"
+                        android:background="@drawable/bg_red_radius"
                         android:padding="10dp"
                         android:src="@drawable/baseline_language_24" />
 
@@ -154,6 +156,7 @@
                         android:textStyle="bold" />
 
                     <Switch
+                        android:id="@+id/GreekSwitch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -177,7 +180,7 @@
                         android:id="@+id/Location1"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:background="@drawable/bg_radius"
+                        android:background="@drawable/bg_red_radius"
                         android:padding="10dp"
                         android:src="@drawable/baseline_location_on_24" />
 
