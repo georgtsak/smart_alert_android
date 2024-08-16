@@ -5,9 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,8 +26,8 @@ import java.util.Map;
 public class RequestsFragment extends Fragment {
 
     private ListView listView;
-    private ArrayAdapter<String> adapter;
-    private List<String> emergencies;
+    private EmergencyReq adapter;
+    private List<Map<String, Object>> emergencies;
     private DatabaseReference reference;
     private FirebaseFirestore firestore;
 
@@ -40,15 +38,7 @@ public class RequestsFragment extends Fragment {
 
         listView = view.findViewById(R.id.emergency_list);
         emergencies = new ArrayList<>();
-        adapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, emergencies) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView text = view.findViewById(android.R.id.text1);
-                //text.setTextColor(Color.WHITE);
-                return view;
-            }
-        };
+        adapter = new EmergencyReq(requireContext(), emergencies);
         listView.setAdapter(adapter);
 
         // Σύνδεση με Firebase Realtime Database για περιστατικά
@@ -76,8 +66,8 @@ public class RequestsFragment extends Fragment {
                         double longitude = (double) emergency.get("longitude");
                         String userId = (String) emergency.get("userId");
 
-                        // Ανάκτηση του firstname και lastname από το Firestore
-                        fetchUserNameAndDisplay(type, latitude, longitude, userId);
+                        emergency.put("id", snapshot.getKey()); // Αποθήκευση του ID της εγγραφής
+                        fetchUserNameAndDisplay(type, latitude, longitude, userId, emergency);
                     }
                 }
             }
@@ -89,7 +79,7 @@ public class RequestsFragment extends Fragment {
         });
     }
 
-    private void fetchUserNameAndDisplay(String type, double latitude, double longitude, String userId) {
+    private void fetchUserNameAndDisplay(String type, double latitude, double longitude, String userId, Map<String, Object> emergency) {
         DocumentReference docRef = firestore.collection("users").document(userId);
         docRef.get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
@@ -97,9 +87,8 @@ public class RequestsFragment extends Fragment {
                 String lastname = documentSnapshot.getString("lastname");
 
                 if (firstname != null && lastname != null) {
-
-                    String item = type + " - Lat: " + latitude + ", Lon: " + longitude + " (User: " + firstname + " " + lastname + ")";
-                    emergencies.add(item);
+                    emergency.put("userName", firstname + " " + lastname);
+                    emergencies.add(emergency);
                     adapter.notifyDataSetChanged();
                 } else {
                     Log.e("RequestsFragment", "Firstname or Lastname is null for userId: " + userId);
@@ -108,10 +97,9 @@ public class RequestsFragment extends Fragment {
                 Log.e("RequestsFragment", "Document does not exist for userId: " + userId);
             }
         }).addOnFailureListener(e -> {
-            // Χειρισμός σφαλμάτων
             Log.e("RequestsFragment", "Failed to fetch user data for userId: " + userId, e);
-            String item = type + " - Lat: " + latitude + ", Lon: " + longitude + " (User: " + userId + ")";
-            emergencies.add(item);
+            emergency.put("userName", userId);
+            emergencies.add(emergency);
             adapter.notifyDataSetChanged();
         });
     }

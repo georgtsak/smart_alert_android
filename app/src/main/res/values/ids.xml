@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="relative_layout_image" type="id" />
+    <item name="detailsButton" type="id" />
 </resources>
