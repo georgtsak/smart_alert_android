@@ -1,49 +1,82 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/blue"
+    android:gravity="center"
     android:padding="16dp">
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:srcCompat="@drawable/baseline_photo_24"
+        android:layout_marginBottom="30dp"/>
 
-    <TextView
-        android:id="@+id/typeTextView"
+    <com.google.android.material.card.MaterialCardView
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Type"
-        android:textSize="18sp" />
+        android:layout_gravity="center"
+        style="@style/custom3"
+        android:background="#FFFFFF">
 
-    <TextView
-        android:id="@+id/commentsTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Comments"
-        android:textSize="18sp" />
+        <LinearLayout
+            android:layout_width="340dp"
+            android:layout_height="350dp"
+            android:orientation="vertical"
+            android:layout_gravity="center">
 
-    <TextView
-        android:id="@+id/locationTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Location"
-        android:textSize="18sp" />
+            <TextView
+                android:id="@+id/typeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Type"
+                android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/statusTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Status"
-        android:textSize="18sp" />
+            <TextView
+                android:id="@+id/commentsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comments"
+                android:textSize="18sp" />
 
-    <Button
-        android:id="@+id/acceptButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Accept"
-        android:layout_marginTop="16dp" />
+            <TextView
+                android:id="@+id/locationTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:textSize="18sp" />
 
-    <Button
-        android:id="@+id/rejectButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Reject"
-        android:layout_marginTop="8dp" />
+            <TextView
+                android:id="@+id/statusTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Status"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/acceptButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Accept"
+                android:backgroundTint="#A611770D"
+                android:layout_marginTop="16dp" />
+
+            <Button
+                android:id="@+id/rejectButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#A6770D0D"
+                android:text="Reject"
+                android:layout_marginTop="8dp" />
+
+
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
 
 </LinearLayout>
