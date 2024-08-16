@@ -11,5 +11,11 @@
     <string name="settings">Ρυθμίσεις</string>
     <string name="requests">Αιτήματα</string>
     <string name="logout">Αποσύνδεση</string>
+    <string-array name="spinner_items">
+        <item>Πυρκαγιά</item>
+        <item>Σεισμός</item>
+        <item>Πλημμύρα</item>
+
+    </string-array>
 
 </resources>
