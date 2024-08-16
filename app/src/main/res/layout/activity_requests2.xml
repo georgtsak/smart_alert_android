@@ -19,8 +19,8 @@
         tools:ignore="MissingConstraints">
 
         <ImageView
-            android:layout_width="23sp"
-            android:layout_height="23sp"
+            android:layout_width="24sp"
+            android:layout_height="24sp"
             app:srcCompat="@drawable/baseline_arrow_back_24"
             android:layout_marginStart="10sp"
             android:onClick="goBack"/>

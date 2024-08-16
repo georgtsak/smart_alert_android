@@ -15,7 +15,8 @@
         <item>Πυρκαγιά</item>
         <item>Σεισμός</item>
         <item>Πλημμύρα</item>
-
     </string-array>
+    <string name="details">Λεπτομέρειες</string>
+
 
 </resources>
