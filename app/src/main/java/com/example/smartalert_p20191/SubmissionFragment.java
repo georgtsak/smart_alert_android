@@ -1,5 +1,4 @@
 package com.example.smartalert_p20191;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -16,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +24,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,32 +31,27 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
 public class SubmissionFragment extends Fragment {
-
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
     private FirebaseStorage storage;
     private StorageReference storageReference;
-    private FusedLocationProviderClient fusedLocationClient;
-
     private Spinner spinner;
-    private EditText commentsEditText;
+    private EditText commentsEditText, loading1;
     private ImageView photoImageView;
     private Button submitButton;
     private TextView loadingText;
-    private Switch locationSwitch; // Add this
+
 
     private Uri filePath;
+    private FusedLocationProviderClient fusedLocationClient;
     private double latitude;
     private double longitude;
-
-    // Permission for storage
+    // permission gia to storage
     private final ActivityResultLauncher<String> requestStoragePermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
@@ -68,7 +60,6 @@ public class SubmissionFragment extends Fragment {
                     Toast.makeText(getContext(), "Storage permission denied", Toast.LENGTH_SHORT).show();
                 }
             });
-
     private final ActivityResultLauncher<Intent> pickImageLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -84,8 +75,7 @@ public class SubmissionFragment extends Fragment {
                 }
             }
     );
-
-    // Permission for location
+    // permission gia to location
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
@@ -94,49 +84,38 @@ public class SubmissionFragment extends Fragment {
                     Toast.makeText(getContext(), "Location permission denied", Toast.LENGTH_SHORT).show();
                 }
             });
-
     public SubmissionFragment() {
     }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_submission, container, false);
-
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
-
         spinner = view.findViewById(R.id.spinner1);
         commentsEditText = view.findViewById(R.id.comments);
         photoImageView = view.findViewById(R.id.photoImageView);
         submitButton = view.findViewById(R.id.button1);
         loadingText = view.findViewById(R.id.loading1);
-        locationSwitch = view.findViewById(R.id.locationSwitch);
 
-        // Set up spinner
+        // spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
                 R.array.spinner_items, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
-        // Set up image picker
+        // image picker
         photoImageView.setOnClickListener(v -> checkStoragePermission());
-
-        // Set up submit button
+        // submit button
         submitButton.setOnClickListener(v -> submitEmergency());
-
-        // Initialize location permission
+        // location permission
         checkLocationPermission();
-
         return view;
     }
-
-    // Check location permission
+    // permission gia to location
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -145,8 +124,7 @@ public class SubmissionFragment extends Fragment {
             requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
         }
     }
-
-    // Check storage permission
+    // permission gia to storage
     private void checkStoragePermission() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -155,7 +133,6 @@ public class SubmissionFragment extends Fragment {
             requestStoragePermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
         }
     }
-
     private void getLocation() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.getLastLocation()
@@ -167,41 +144,32 @@ public class SubmissionFragment extends Fragment {
                     });
         }
     }
-
     private void chooseImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         pickImageLauncher.launch(Intent.createChooser(intent, "Select Picture"));
     }
-
     private void submitEmergency() {
         String selectedItem = spinner.getSelectedItem().toString();
         String commentText = commentsEditText.getText().toString().trim();
         String userId = mAuth.getCurrentUser().getUid();
-
         if (commentText.isEmpty()) {
             Toast.makeText(getContext(), "Please enter details in the comment field", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (locationSwitch.isChecked()) {
-            loadingText.setText("Loading...");
+        loadingText.setText("Loading...");
 
-            if (filePath != null) {
-                uploadImageAndSaveEmergency(selectedItem, commentText, userId);
-            } else {
-                saveEmergency(selectedItem, commentText, userId, null);
-            }
+        if (filePath != null) {
+            uploadImageAndSaveEmergency(selectedItem, commentText, userId);
         } else {
-            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+            saveEmergency(selectedItem, commentText, userId, null);
         }
     }
-
     private void uploadImageAndSaveEmergency(String type, String comments, String userId) {
         String imageId = UUID.randomUUID().toString();
         StorageReference ref = storageReference.child("images/" + imageId);
-
         ref.putFile(filePath)
                 .addOnSuccessListener(taskSnapshot -> ref.getDownloadUrl().addOnSuccessListener(uri -> {
                     saveEmergency(type, comments, userId, uri.toString());
@@ -214,9 +182,7 @@ public class SubmissionFragment extends Fragment {
 
     private void saveEmergency(String type, String comments, String userId, @Nullable String imageUrl) {
         DatabaseReference reference = database.getReference("emergencies");
-
         String id = reference.push().getKey();
-
         if (id != null) {
             Map<String, Object> emergency = new HashMap<>();
             emergency.put("type", type);
@@ -228,12 +194,12 @@ public class SubmissionFragment extends Fragment {
             if (imageUrl != null) {
                 emergency.put("imageUrl", imageUrl);
             }
-
             reference.child(id).setValue(emergency)
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(getContext(), "Emergency submitted successfully", Toast.LENGTH_SHORT).show();
+                        // Clear fields after submission
                         loadingText.setText("");
-                        // Clear fields
+                        // katharismos
                         spinner.setSelection(0);
                         commentsEditText.setText("");
                         photoImageView.setImageResource(R.drawable.baseline_add_photo_alternate_24);
