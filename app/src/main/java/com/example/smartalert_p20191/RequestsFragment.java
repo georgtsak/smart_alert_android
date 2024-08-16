@@ -1,11 +1,14 @@
 package com.example.smartalert_p20191;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +19,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +32,7 @@ public class RequestsFragment extends Fragment {
     private ArrayAdapter<String> adapter;
     private List<String> emergencies;
     private DatabaseReference reference;
+    private FirebaseFirestore firestore;
 
     @Nullable
     @Override
@@ -35,12 +41,23 @@ public class RequestsFragment extends Fragment {
 
         listView = view.findViewById(R.id.emergency_list);
         emergencies = new ArrayList<>();
-        adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, emergencies);
+        adapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, emergencies) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView text = view.findViewById(android.R.id.text1);
+                text.setTextColor(Color.WHITE); // Κάνουμε τα γράμματα άσπρα
+                return view;
+            }
+        };
         listView.setAdapter(adapter);
 
-        // Σύνδεση με τη Firebase
+        // Σύνδεση με Firebase Realtime Database για περιστατικά
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         reference = database.getReference("emergencies");
+
+        // Σύνδεση με Firestore για ανάκτηση στοιχείων χρηστών
+        firestore = FirebaseFirestore.getInstance();
 
         loadEmergenciesFromFirebase();
 
@@ -60,19 +77,44 @@ public class RequestsFragment extends Fragment {
                         double longitude = (double) emergency.get("longitude");
                         String userId = (String) emergency.get("userId");
 
-                        // Προσθήκη των δεδομένων στο ListView
-                        String item = type + " - Lat: " + latitude + ", Lon: " + longitude + " (User: " + userId + ")";
-                        emergencies.add(item);
+                        // Ανάκτηση του firstname και lastname από το Firestore
+                        fetchUserNameAndDisplay(type, latitude, longitude, userId);
                     }
                 }
-                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Χειρισμός σφαλμάτων
+                Log.e("RequestsFragment", "Failed to load emergencies: " + databaseError.getMessage());
             }
         });
     }
-}
 
+    private void fetchUserNameAndDisplay(String type, double latitude, double longitude, String userId) {
+        DocumentReference docRef = firestore.collection("users").document(userId);
+        docRef.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                String firstname = documentSnapshot.getString("firstname");
+                String lastname = documentSnapshot.getString("lastname");
+
+                if (firstname != null && lastname != null) {
+                    // Δημιουργία της εγγραφής για το ListView
+                    String item = type + " - Lat: " + latitude + ", Lon: " + longitude + " (User: " + firstname + " " + lastname + ")";
+                    emergencies.add(item);
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Log.e("RequestsFragment", "Firstname or Lastname is null for userId: " + userId);
+                }
+            } else {
+                Log.e("RequestsFragment", "Document does not exist for userId: " + userId);
+            }
+        }).addOnFailureListener(e -> {
+            // Χειρισμός σφαλμάτων
+            Log.e("RequestsFragment", "Failed to fetch user data for userId: " + userId, e);
+            String item = type + " - Lat: " + latitude + ", Lon: " + longitude + " (User: " + userId + ")";
+            emergencies.add(item);
+            adapter.notifyDataSetChanged();
+        });
+    }
+}
