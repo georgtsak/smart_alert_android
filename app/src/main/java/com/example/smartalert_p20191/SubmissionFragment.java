@@ -1,4 +1,5 @@
 package com.example.smartalert_p20191;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
@@ -24,6 +25,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,6 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -142,6 +146,13 @@ public class SubmissionFragment extends Fragment {
                             longitude = location.getLongitude();
                         }
                     });
+        }
+    }
+    public void goBack(View view) {
+        // Check if there is a fragment in the back stack
+        FragmentManager fragmentManager = getParentFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStack();
         }
     }
     private void chooseImage() {
