@@ -191,15 +191,15 @@ public class SubmissionFragment extends Fragment {
             emergency.put("timestamp", System.currentTimeMillis());
             emergency.put("latitude", latitude);
             emergency.put("longitude", longitude);
+            emergency.put("status", 0);
+
             if (imageUrl != null) {
                 emergency.put("imageUrl", imageUrl);
             }
             reference.child(id).setValue(emergency)
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(getContext(), "Emergency submitted successfully", Toast.LENGTH_SHORT).show();
-                        // Clear fields after submission
                         loadingText.setText("");
-                        // katharismos
                         spinner.setSelection(0);
                         commentsEditText.setText("");
                         photoImageView.setImageResource(R.drawable.baseline_add_photo_alternate_24);

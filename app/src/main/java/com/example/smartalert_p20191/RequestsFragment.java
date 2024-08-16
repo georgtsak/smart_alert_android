@@ -1,6 +1,5 @@
 package com.example.smartalert_p20191;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,7 +45,7 @@ public class RequestsFragment extends Fragment {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 TextView text = view.findViewById(android.R.id.text1);
-                text.setTextColor(Color.WHITE); // Κάνουμε τα γράμματα άσπρα
+                //text.setTextColor(Color.WHITE);
                 return view;
             }
         };
@@ -85,7 +84,6 @@ public class RequestsFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Χειρισμός σφαλμάτων
                 Log.e("RequestsFragment", "Failed to load emergencies: " + databaseError.getMessage());
             }
         });
@@ -99,7 +97,7 @@ public class RequestsFragment extends Fragment {
                 String lastname = documentSnapshot.getString("lastname");
 
                 if (firstname != null && lastname != null) {
-                    // Δημιουργία της εγγραφής για το ListView
+
                     String item = type + " - Lat: " + latitude + ", Lon: " + longitude + " (User: " + firstname + " " + lastname + ")";
                     emergencies.add(item);
                     adapter.notifyDataSetChanged();
