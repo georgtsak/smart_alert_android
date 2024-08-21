@@ -49,6 +49,9 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:$fragment_version")
     implementation("androidx.activity:activity-ktx:1.5.0")
     implementation("androidx.fragment:fragment-ktx:1.5.0")
+    implementation ("com.github.bumptech.glide:glide:4.15.1")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
+
 
 
 }
