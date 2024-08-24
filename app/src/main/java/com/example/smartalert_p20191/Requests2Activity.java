@@ -51,7 +51,8 @@ public class Requests2Activity extends AppCompatActivity {
         String imageUrl = intent.getStringExtra("imageUrl");
 
         typeText.setText("Type: " + type);
-        commentsTextView.setText("Comments: " + comments);
+        //commentsTextView.setText("Comments: " + comments);
+        commentsTextView.setText("Σχόλια: " + (comments != null ? comments : "Δεν υπάρχουν σχόλια"));
         locationTextView.setText("Location: " + latitude + ", " + longitude);
         statusTextView.setText("Status: " + (status == 0 ? "Pending" : status == 1 ? "Accepted" : "Rejected"));
 
