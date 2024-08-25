@@ -18,11 +18,17 @@
         android:text="Location"
         android:textSize="16sp" />
 
+    <TextView
+        android:id="@+id/userIdTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User ID"
+        android:textSize="16sp" />
+
     <Button
         android:id="@+id/detailsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style=""
         android:text="Details"
         android:layout_marginTop="8dp" />
 </LinearLayout>

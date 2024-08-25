@@ -13,12 +13,13 @@ import java.util.List;
 import java.util.Map;
 
 public class EmergencyReq extends BaseAdapter {
+
+    private Context context;
     private List<Map<String, Object>> emergencies;
-    private LayoutInflater inflater;
 
     public EmergencyReq(Context context, List<Map<String, Object>> emergencies) {
+        this.context = context;
         this.emergencies = emergencies;
-        this.inflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -39,36 +40,37 @@ public class EmergencyReq extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.activity_emergencyreq, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.activity_emergencyreq, parent, false);
         }
 
         TextView typeTextView = convertView.findViewById(R.id.typeTextView);
         TextView locationTextView = convertView.findViewById(R.id.locationTextView);
+        TextView userIdTextView = convertView.findViewById(R.id.userIdTextView);
         Button detailsButton = convertView.findViewById(R.id.detailsButton);
 
         Map<String, Object> emergency = emergencies.get(position);
+
         String type = (String) emergency.get("type");
-        double latitude = (double) emergency.get("latitude");
-        double longitude = (double) emergency.get("longitude");
+        double latitude = (Double) emergency.get("latitude");
+        double longitude = (Double) emergency.get("longitude");
         String userId = (String) emergency.get("userId");
-        String emergencyId = (String) emergency.get("id");
 
         typeTextView.setText("Type: " + type);
         locationTextView.setText("Location: " + latitude + ", " + longitude);
+        userIdTextView.setText("User ID: " + userId);
 
         detailsButton.setOnClickListener(v -> {
-            Intent intent = new Intent(inflater.getContext(), Requests2Activity.class);
-            intent.putExtra("emergencyId", emergencyId);
+            Intent intent = new Intent(context, Requests2Activity.class);
+
+            intent.putExtra("emergencyId", (String) emergency.get("id"));
             intent.putExtra("type", type);
             intent.putExtra("latitude", latitude);
             intent.putExtra("longitude", longitude);
-            intent.putExtra("userId", userId);
-
             intent.putExtra("status", (Integer) emergency.get("status"));
             intent.putExtra("comments", (String) emergency.get("comments"));
             intent.putExtra("imageUrl", (String) emergency.get("imageUrl"));
 
-            inflater.getContext().startActivity(intent);
+            context.startActivity(intent);
         });
 
         return convertView;

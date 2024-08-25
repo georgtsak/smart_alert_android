@@ -149,7 +149,6 @@ public class SubmissionFragment extends Fragment {
         }
     }
     public void goBack(View view) {
-        // Check if there is a fragment in the back stack
         FragmentManager fragmentManager = getParentFragmentManager();
         if (fragmentManager.getBackStackEntryCount() > 0) {
             fragmentManager.popBackStack();

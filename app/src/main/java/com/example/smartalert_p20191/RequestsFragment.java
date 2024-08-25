@@ -16,8 +16,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +27,6 @@ public class RequestsFragment extends Fragment {
     private EmergencyReq adapter;
     private List<Map<String, Object>> emergencies;
     private DatabaseReference reference;
-    private FirebaseFirestore firestore;
 
     @Nullable
     @Override
@@ -44,9 +41,6 @@ public class RequestsFragment extends Fragment {
         // Σύνδεση με Firebase Realtime Database για περιστατικά
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         reference = database.getReference("emergencies");
-
-        // Σύνδεση με Firestore για ανάκτηση στοιχείων χρηστών
-        firestore = FirebaseFirestore.getInstance();
 
         loadEmergenciesFromFirebase();
 
@@ -67,7 +61,10 @@ public class RequestsFragment extends Fragment {
                         String userId = (String) emergency.get("userId");
 
                         emergency.put("id", snapshot.getKey());
-                        fetchUserNameAndDisplay(type, latitude, longitude, userId, emergency);
+                        String displayText = type + " - Lat: " + latitude + ", Lon: " + longitude + " (User ID: " + userId + ")";
+                        emergency.put("displayText", displayText);
+                        emergencies.add(emergency);
+                        adapter.notifyDataSetChanged();
                     }
                 }
             }
@@ -76,31 +73,6 @@ public class RequestsFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e("RequestsFragment", "Failed to load emergencies: " + databaseError.getMessage());
             }
-        });
-    }
-
-    private void fetchUserNameAndDisplay(String type, double latitude, double longitude, String userId, Map<String, Object> emergency) {
-        DocumentReference docRef = firestore.collection("users").document(userId);
-        docRef.get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                String firstname = documentSnapshot.getString("firstname");
-                String lastname = documentSnapshot.getString("lastname");
-
-                if (firstname != null && lastname != null) {
-                    emergency.put("userName", firstname + " " + lastname);
-                    emergencies.add(emergency);
-                    adapter.notifyDataSetChanged();
-                } else {
-                    Log.e("RequestsFragment", "Firstname or Lastname is null for userId: " + userId);
-                }
-            } else {
-                Log.e("RequestsFragment", "Document does not exist for userId: " + userId);
-            }
-        }).addOnFailureListener(e -> {
-            Log.e("RequestsFragment", "Failed to fetch user data for userId: " + userId, e);
-            emergency.put("userName", userId);
-            emergencies.add(emergency);
-            adapter.notifyDataSetChanged();
         });
     }
 }
