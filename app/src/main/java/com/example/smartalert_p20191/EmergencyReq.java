@@ -56,7 +56,6 @@ public class EmergencyReq extends BaseAdapter {
         typeTextView.setText("Type: " + type);
         locationTextView.setText("Location: " + latitude + ", " + longitude);
 
-        // OnClickListener για το κουμπί
         detailsButton.setOnClickListener(v -> {
             Intent intent = new Intent(inflater.getContext(), Requests2Activity.class);
             intent.putExtra("emergencyId", emergencyId);
@@ -64,7 +63,11 @@ public class EmergencyReq extends BaseAdapter {
             intent.putExtra("latitude", latitude);
             intent.putExtra("longitude", longitude);
             intent.putExtra("userId", userId);
-            // Εδώ μπορείτε να προσθέσετε και άλλα δεδομένα αν χρειάζεται
+
+            intent.putExtra("status", (Integer) emergency.get("status"));
+            intent.putExtra("comments", (String) emergency.get("comments"));
+            intent.putExtra("imageUrl", (String) emergency.get("imageUrl"));
+
             inflater.getContext().startActivity(intent);
         });
 

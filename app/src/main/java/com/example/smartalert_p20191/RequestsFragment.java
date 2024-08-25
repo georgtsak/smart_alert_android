@@ -66,7 +66,7 @@ public class RequestsFragment extends Fragment {
                         double longitude = (double) emergency.get("longitude");
                         String userId = (String) emergency.get("userId");
 
-                        emergency.put("id", snapshot.getKey()); // Αποθήκευση του ID της εγγραφής
+                        emergency.put("id", snapshot.getKey());
                         fetchUserNameAndDisplay(type, latitude, longitude, userId, emergency);
                     }
                 }
