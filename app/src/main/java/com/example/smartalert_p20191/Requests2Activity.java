@@ -2,6 +2,7 @@ package com.example.smartalert_p20191;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -51,10 +52,17 @@ public class Requests2Activity extends AppCompatActivity {
         locationTextView.setText("Location: " + latitude + ", " + longitude);
         statusTextView.setText("Status: " + (status == 0 ? "Pending" : status == 1 ? "Accepted" : "Rejected"));
 
+
         if (imageUrl != null && !imageUrl.isEmpty()) {
             Glide.with(this).load(imageUrl).into(emergencyImageView);
         } else {
             emergencyImageView.setImageResource(R.drawable.baseline_photo_24); // Default image resource
+        }
+
+        // an to request den einai pending   tote ta koubia accept kai reject tha ginoun hidden
+        if (status != 0) {
+            acceptButton.setVisibility(View.GONE);
+            rejectButton.setVisibility(View.GONE);
         }
 
         acceptButton.setOnClickListener(v -> updateStatus(1));

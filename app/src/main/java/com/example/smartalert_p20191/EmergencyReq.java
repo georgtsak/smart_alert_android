@@ -55,7 +55,7 @@ public class EmergencyReq extends BaseAdapter {
         double latitude = (Double) emergency.get("latitude");
         double longitude = (Double) emergency.get("longitude");
         String userId = (String) emergency.get("userId");
-        Long statusLong = (Long) emergency.get("status"); // Use Long for compatibility
+        Long statusLong = (Long) emergency.get("status");
         int status = (statusLong != null) ? statusLong.intValue() : 0;
 
         typeTextView.setText("Type: " + type);
