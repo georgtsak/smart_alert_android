@@ -2,6 +2,9 @@ package com.example.smartalert_p20191;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -50,7 +53,26 @@ public class Requests2Activity extends AppCompatActivity {
         typeText.setText("Type: " + type);
         commentsTextView.setText("Comments: " + (comments != null ? comments : "No comments"));
         locationTextView.setText("Location: " + latitude + ", " + longitude);
-        statusTextView.setText("Status: " + (status == 0 ? "Pending" : status == 1 ? "Accepted" : "Rejected"));
+        SpannableString spannable = new SpannableString("Status: " + (status == 0 ? "Pending" : status == 1 ? "Accepted" : "Rejected"));
+
+// Set color for "Pending", "Accepted", or "Rejected"
+        int color;
+        if (status == 1) {
+            color = getResources().getColor(R.color.status1);
+        } else if (status == 2) {
+            color = getResources().getColor(R.color.status2);
+        } else {
+            color = getResources().getColor(R.color.status0);
+        }
+
+// Find the index where the status text starts
+        int statusTextStart = "Status: ".length();
+
+// Apply color only to the status text
+        spannable.setSpan(new ForegroundColorSpan(color), statusTextStart, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        statusTextView.setText(spannable);
+
 
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
