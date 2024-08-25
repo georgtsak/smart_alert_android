@@ -8,6 +8,10 @@
     <color name="gray2">#959595</color>
     <color name="gray3">#e6e6e6</color>
     <color name="blue">#136597</color>
+    <color name="status2">#B50000</color>
+    <color name="status1">#0E9709</color>
+    <color name="status0">#5C5C5C</color>
+
 
 
 </resources>

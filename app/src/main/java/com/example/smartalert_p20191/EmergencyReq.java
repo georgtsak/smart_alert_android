@@ -47,6 +47,7 @@ public class EmergencyReq extends BaseAdapter {
         TextView locationTextView = convertView.findViewById(R.id.locationTextView);
         TextView userIdTextView = convertView.findViewById(R.id.userIdTextView);
         Button detailsButton = convertView.findViewById(R.id.detailsButton);
+        TextView statusTextView = convertView.findViewById(R.id.statusTextView);  // Add this line
 
         Map<String, Object> emergency = emergencies.get(position);
 
@@ -54,10 +55,24 @@ public class EmergencyReq extends BaseAdapter {
         double latitude = (Double) emergency.get("latitude");
         double longitude = (Double) emergency.get("longitude");
         String userId = (String) emergency.get("userId");
+        Long statusLong = (Long) emergency.get("status"); // Use Long for compatibility
+        int status = (statusLong != null) ? statusLong.intValue() : 0;
 
         typeTextView.setText("Type: " + type);
         locationTextView.setText("Location: " + latitude + ", " + longitude);
         userIdTextView.setText("User ID: " + userId);
+
+        // Set status text and color based on the status value
+        if (status == 1) {
+            statusTextView.setText("Accepted");
+            statusTextView.setTextColor(context.getResources().getColor(R.color.status1));
+        } else if (status == 2) {
+            statusTextView.setText("Rejected");
+            statusTextView.setTextColor(context.getResources().getColor(R.color.status2));
+        } else {
+            statusTextView.setText("Pending");
+            statusTextView.setTextColor(context.getResources().getColor(R.color.status0));
+        }
 
         detailsButton.setOnClickListener(v -> {
             Intent intent = new Intent(context, Requests2Activity.class);
@@ -68,24 +83,13 @@ public class EmergencyReq extends BaseAdapter {
             intent.putExtra("latitude", latitude);
             intent.putExtra("longitude", longitude);
 
-            // Correctly handle Long to Integer conversion
-            Long statusLong = (Long) emergency.get("status");
-            intent.putExtra("status", statusLong != null ? statusLong.intValue() : 0);
+            intent.putExtra("status", status);
 
             intent.putExtra("comments", (String) emergency.get("comments"));
             intent.putExtra("imageUrl", (String) emergency.get("imageUrl"));
 
-            //Log.d("EmergencyReq", "Starting Requests2Activity with ID: " + id);
-            //Log.d("EmergencyReq", "Type: " + type);
-            //Log.d("EmergencyReq", "Latitude: " + latitude);
-            //Log.d("EmergencyReq", "Longitude: " + longitude);
-            //Log.d("EmergencyReq", "Status: " + (statusLong != null ? statusLong.intValue() : 0));
-            //Log.d("EmergencyReq", "Comments: " + (String) emergency.get("comments"));
-            //Log.d("EmergencyReq", "Image URL: " + (String) emergency.get("imageUrl"));
-
             context.startActivity(intent);
         });
-
 
         return convertView;
     }
