@@ -13,18 +13,14 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-//exoun thema ta comments --> comments:null
-//prepei na emfanizw to image
 public class Requests2Activity extends AppCompatActivity {
 
     private TextView typeText, commentsTextView, locationTextView, statusTextView;
     private Button acceptButton, rejectButton;
+    private ImageView emergencyImageView;
 
     private FirebaseDatabase database;
     private String emergencyId;
-    private ImageView emergencyImageView;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +47,16 @@ public class Requests2Activity extends AppCompatActivity {
         String imageUrl = intent.getStringExtra("imageUrl");
 
         typeText.setText("Type: " + type);
-        //commentsTextView.setText("Comments: " + comments);
-        commentsTextView.setText("Σχόλια: " + (comments != null ? comments : "Δεν υπάρχουν σχόλια"));
+        commentsTextView.setText("Comments: " + (comments != null ? comments : "No comments"));
         locationTextView.setText("Location: " + latitude + ", " + longitude);
         statusTextView.setText("Status: " + (status == 0 ? "Pending" : status == 1 ? "Accepted" : "Rejected"));
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
             Glide.with(this).load(imageUrl).into(emergencyImageView);
         } else {
-            emergencyImageView.setImageResource(R.drawable.baseline_photo_24);
+            emergencyImageView.setImageResource(R.drawable.baseline_photo_24); // Default image resource
         }
+
         acceptButton.setOnClickListener(v -> updateStatus(1));
         rejectButton.setOnClickListener(v -> updateStatus(2));
     }

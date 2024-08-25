@@ -62,16 +62,30 @@ public class EmergencyReq extends BaseAdapter {
         detailsButton.setOnClickListener(v -> {
             Intent intent = new Intent(context, Requests2Activity.class);
 
-            intent.putExtra("emergencyId", (String) emergency.get("id"));
+            String id = (String) emergency.get("id");
+            intent.putExtra("emergencyId", id);
             intent.putExtra("type", type);
             intent.putExtra("latitude", latitude);
             intent.putExtra("longitude", longitude);
-            intent.putExtra("status", (Integer) emergency.get("status"));
+
+            // Correctly handle Long to Integer conversion
+            Long statusLong = (Long) emergency.get("status");
+            intent.putExtra("status", statusLong != null ? statusLong.intValue() : 0);
+
             intent.putExtra("comments", (String) emergency.get("comments"));
             intent.putExtra("imageUrl", (String) emergency.get("imageUrl"));
 
+            //Log.d("EmergencyReq", "Starting Requests2Activity with ID: " + id);
+            //Log.d("EmergencyReq", "Type: " + type);
+            //Log.d("EmergencyReq", "Latitude: " + latitude);
+            //Log.d("EmergencyReq", "Longitude: " + longitude);
+            //Log.d("EmergencyReq", "Status: " + (statusLong != null ? statusLong.intValue() : 0));
+            //Log.d("EmergencyReq", "Comments: " + (String) emergency.get("comments"));
+            //Log.d("EmergencyReq", "Image URL: " + (String) emergency.get("imageUrl"));
+
             context.startActivity(intent);
         });
+
 
         return convertView;
     }
