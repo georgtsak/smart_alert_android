@@ -47,9 +47,14 @@ public class EmergencyReq extends BaseAdapter {
         TextView locationTextView = convertView.findViewById(R.id.locationTextView);
         TextView userIdTextView = convertView.findViewById(R.id.userIdTextView);
         Button detailsButton = convertView.findViewById(R.id.detailsButton);
-        TextView statusTextView = convertView.findViewById(R.id.statusTextView);  // Add this line
+        TextView statusTextView = convertView.findViewById(R.id.statusTextView);
 
         Map<String, Object> emergency = emergencies.get(position);
+
+
+        if (emergency == null) {
+            return convertView; // added!!!!!!!!!!!!
+        }
 
         String type = (String) emergency.get("type");
         double latitude = (Double) emergency.get("latitude");
