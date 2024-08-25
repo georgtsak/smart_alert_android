@@ -25,10 +25,23 @@
         android:text="User ID"
         android:textSize="16sp" />
 
-    <Button
-        android:id="@+id/detailsButton"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Details"
-        android:layout_marginTop="8dp" />
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/detailsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Details"
+            android:layout_marginEnd="8dp" />
+
+        <TextView
+            android:id="@+id/statusTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pending" />
+    </LinearLayout>
 </LinearLayout>
