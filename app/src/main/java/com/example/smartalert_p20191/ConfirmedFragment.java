@@ -26,8 +26,8 @@ import java.util.Map;
 public class ConfirmedFragment extends Fragment {
 
     private ListView listView;
-    private EmergencyReq adapter;
-    private List<Map<String, Object>> emergencies;
+    private EmergencyGroup adapter;
+    private List<Map<String, Object>> groupedEmergencies;
     private static final double MAX_DISTANCE = 200; // Maximum distance in km
 
     @Nullable
@@ -36,8 +36,8 @@ public class ConfirmedFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_confirmed, container, false);
 
         listView = view.findViewById(R.id.emergency_list_confirmed);
-        emergencies = new ArrayList<>();
-        adapter = new EmergencyReq(getContext(), emergencies);
+        groupedEmergencies = new ArrayList<>();
+        adapter = new EmergencyGroup(getContext(), groupedEmergencies);
         listView.setAdapter(adapter);
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("emergencies");
@@ -89,9 +89,12 @@ public class ConfirmedFragment extends Fragment {
             }
         }
 
+        // Ensure groupedMap is not null before using
         if (groupedMap == null) {
             groupedMap = new HashMap<>();
         }
+
+        // Combine emergencies if they are close to each other
         for (Map.Entry<String, List<Map<String, Object>>> entry : groupedMap.entrySet()) {
             List<Map<String, Object>> group = entry.getValue();
             List<Map<String, Object>> mergedGroup = new ArrayList<>();
@@ -116,7 +119,7 @@ public class ConfirmedFragment extends Fragment {
                 mergedGroup.add(mergedEmergency);
             }
 
-            // mergedGroup --> not null
+            // Ensure mergedGroup is not null before using
             if (mergedGroup == null) {
                 mergedGroup = new ArrayList<>();
             }
@@ -124,19 +127,20 @@ public class ConfirmedFragment extends Fragment {
             groupedEmergencies.addAll(mergedGroup);
         }
 
-        // groupedEmergencies --> not null
+        // Ensure groupedEmergencies is not null before using
         if (groupedEmergencies == null) {
             groupedEmergencies = new ArrayList<>();
         }
 
-        emergencies.clear();
-        emergencies.addAll(groupedEmergencies);
+        this.groupedEmergencies.clear();
+        this.groupedEmergencies.addAll(groupedEmergencies);
         adapter.notifyDataSetChanged();
     }
 
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-        // Haversine formula
-        return Math.sqrt(Math.pow(lat1 - lat2, 2) + Math.pow(lon1 - lon2, 2));
+        // Use Haversine formula or any other distance calculation method
+        // This is a placeholder implementation
+        return Math.sqrt(Math.pow(lat2 - lat1, 2) + Math.pow(lon2 - lon1, 2));
     }
 
     private Map<String, Object> combineEmergencies(List<Map<String, Object>> emergencies) {
@@ -145,10 +149,16 @@ public class ConfirmedFragment extends Fragment {
         }
 
         Map<String, Object> combinedEmergency = new HashMap<>();
-        combinedEmergency.put("type", emergencies.get(0).get("type"));
-        combinedEmergency.put("latitude", emergencies.get(0).get("latitude"));
-        combinedEmergency.put("longitude", emergencies.get(0).get("longitude"));
-        combinedEmergency.put("count", emergencies.size());
+        String type = (String) emergencies.get(0).get("type");
+        double latitude = (Double) emergencies.get(0).get("latitude");
+        double longitude = (Double) emergencies.get(0).get("longitude");
+        int count = emergencies.size();
+
+        combinedEmergency.put("type", type);
+        combinedEmergency.put("latitude", latitude);
+        combinedEmergency.put("longitude", longitude);
+        combinedEmergency.put("count", count);
+
         return combinedEmergency;
     }
 }
