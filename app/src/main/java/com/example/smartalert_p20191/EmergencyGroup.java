@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,6 +47,7 @@ public class EmergencyGroup extends BaseAdapter {
         TextView locationTextView = convertView.findViewById(R.id.groupedLocationTextView);
         TextView countTextView = convertView.findViewById(R.id.groupedCountTextView);
         ImageView imageView = convertView.findViewById(R.id.groupedImageView);
+        Button alertButton = convertView.findViewById(R.id.alertButton);
 
 
         Map<String, Object> emergency = groupedEmergencies.get(position);
@@ -61,12 +63,16 @@ public class EmergencyGroup extends BaseAdapter {
 
         if (count > 9) {
             imageView.setImageResource(R.drawable.baseline_filter_4_24); // level 4 - red
+            alertButton.setVisibility(View.VISIBLE);
         } else if (count > 6) {
             imageView.setImageResource(R.drawable.baseline_filter_3_24); // level 3 - orange
+            alertButton.setVisibility(View.GONE); // hide button
         } else if (count > 3) {
             imageView.setImageResource(R.drawable.baseline_filter_2_24); // level 2 - yellow
+            alertButton.setVisibility(View.GONE); // hide
         } else {
             imageView.setImageResource(R.drawable.baseline_filter_1_24); // level 1 - green
+            alertButton.setVisibility(View.GONE); // hide
         }
 
         return convertView;
