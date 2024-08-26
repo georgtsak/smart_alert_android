@@ -62,16 +62,16 @@ public class EmergencyGroup extends BaseAdapter {
         countTextView.setText("Count: " + count);
 
         if (count > 9) {
-            imageView.setImageResource(R.drawable.baseline_filter_4_24); // level 4 - red
+            imageView.setImageResource(R.drawable.baseline_filter_4_24); // level 4 --> red
             alertButton.setVisibility(View.VISIBLE);
         } else if (count > 6) {
-            imageView.setImageResource(R.drawable.baseline_filter_3_24); // level 3 - orange
+            imageView.setImageResource(R.drawable.baseline_filter_3_24); // level 3 --> orange
             alertButton.setVisibility(View.GONE); // hide button
         } else if (count > 3) {
-            imageView.setImageResource(R.drawable.baseline_filter_2_24); // level 2 - yellow
+            imageView.setImageResource(R.drawable.baseline_filter_2_24); // level 2 --> yellow
             alertButton.setVisibility(View.GONE); // hide
         } else {
-            imageView.setImageResource(R.drawable.baseline_filter_1_24); // level 1 - green
+            imageView.setImageResource(R.drawable.baseline_filter_1_24); // level 1 --> green
             alertButton.setVisibility(View.GONE); // hide
         }
 

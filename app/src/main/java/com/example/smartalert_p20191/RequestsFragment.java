@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +39,6 @@ public class RequestsFragment extends Fragment {
         adapter = new EmergencyReq(requireContext(), emergencies);
         listView.setAdapter(adapter);
 
-        // Σύνδεση με Firebase Realtime Database για περιστατικά
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         reference = database.getReference("emergencies");
 
@@ -52,6 +52,8 @@ public class RequestsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 emergencies.clear();
+                List<Map<String, Object>> tempList = new ArrayList<>();
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Map<String, Object> emergency = (Map<String, Object>) snapshot.getValue();
                     if (emergency != null) {
@@ -63,11 +65,16 @@ public class RequestsFragment extends Fragment {
                         emergency.put("id", snapshot.getKey());
                         String displayText = type + " - Lat: " + latitude + ", Lon: " + longitude + " (User ID: " + userId + ")";
                         emergency.put("displayText", displayText);
-                        emergencies.add(emergency);
-                        adapter.notifyDataSetChanged();
+                        tempList.add(emergency);
                     }
                 }
+
+                // Reverse the list to show the most recent emergencies first
+                Collections.reverse(tempList);
+                emergencies.addAll(tempList);
+                adapter.notifyDataSetChanged();
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
