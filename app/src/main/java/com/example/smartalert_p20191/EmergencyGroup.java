@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -44,6 +45,8 @@ public class EmergencyGroup extends BaseAdapter {
         TextView typeTextView = convertView.findViewById(R.id.groupedTypeTextView);
         TextView locationTextView = convertView.findViewById(R.id.groupedLocationTextView);
         TextView countTextView = convertView.findViewById(R.id.groupedCountTextView);
+        ImageView imageView = convertView.findViewById(R.id.groupedImageView);
+
 
         Map<String, Object> emergency = groupedEmergencies.get(position);
 
@@ -55,6 +58,16 @@ public class EmergencyGroup extends BaseAdapter {
         typeTextView.setText("Type: " + type);
         locationTextView.setText("Location: " + latitude + ", " + longitude);
         countTextView.setText("Count: " + count);
+
+        if (count > 9) {
+            imageView.setImageResource(R.drawable.baseline_filter_4_24); // level 4 - red
+        } else if (count > 6) {
+            imageView.setImageResource(R.drawable.baseline_filter_3_24); // level 3 - orange
+        } else if (count > 3) {
+            imageView.setImageResource(R.drawable.baseline_filter_2_24); // level 2 - yellow
+        } else {
+            imageView.setImageResource(R.drawable.baseline_filter_1_24); // level 1 - green
+        }
 
         return convertView;
     }
