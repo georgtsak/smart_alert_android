@@ -28,7 +28,7 @@ public class ConfirmedFragment extends Fragment {
     private ListView listView;
     private EmergencyGroup adapter;
     private List<Map<String, Object>> groupedEmergencies;
-    private static final double MAX_DISTANCE = 200; // Maximum distance in km
+    private static final double MAX_DISTANCE = 6;
 
     @Nullable
     @Override
@@ -47,7 +47,7 @@ public class ConfirmedFragment extends Fragment {
                 List<Map<String, Object>> rawEmergencies = new ArrayList<>();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Map<String, Object> emergency = (Map<String, Object>) dataSnapshot.getValue();
-                    if (emergency != null && (Long) emergency.get("status") == 1) { // Only accepted emergencies
+                    if (emergency != null && (Long) emergency.get("status") == 1) { // for status:accepted
                         rawEmergencies.add(emergency);
                     }
                 }
@@ -89,12 +89,10 @@ public class ConfirmedFragment extends Fragment {
             }
         }
 
-        // Ensure groupedMap is not null before using
         if (groupedMap == null) {
             groupedMap = new HashMap<>();
         }
 
-        // Combine emergencies if they are close to each other
         for (Map.Entry<String, List<Map<String, Object>>> entry : groupedMap.entrySet()) {
             List<Map<String, Object>> group = entry.getValue();
             List<Map<String, Object>> mergedGroup = new ArrayList<>();
@@ -119,7 +117,6 @@ public class ConfirmedFragment extends Fragment {
                 mergedGroup.add(mergedEmergency);
             }
 
-            // Ensure mergedGroup is not null before using
             if (mergedGroup == null) {
                 mergedGroup = new ArrayList<>();
             }
@@ -127,7 +124,6 @@ public class ConfirmedFragment extends Fragment {
             groupedEmergencies.addAll(mergedGroup);
         }
 
-        // Ensure groupedEmergencies is not null before using
         if (groupedEmergencies == null) {
             groupedEmergencies = new ArrayList<>();
         }
@@ -138,10 +134,19 @@ public class ConfirmedFragment extends Fragment {
     }
 
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-        // Use Haversine formula or any other distance calculation method
-        // This is a placeholder implementation
-        return Math.sqrt(Math.pow(lat2 - lat1, 2) + Math.pow(lon2 - lon1, 2));
+        final int R = 6371; // aktina ghs
+
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c;
+
+        return distance;
     }
+
 
     private Map<String, Object> combineEmergencies(List<Map<String, Object>> emergencies) {
         if (emergencies == null || emergencies.isEmpty()) {

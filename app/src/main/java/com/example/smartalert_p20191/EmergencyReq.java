@@ -51,11 +51,6 @@ public class EmergencyReq extends BaseAdapter {
 
         Map<String, Object> emergency = emergencies.get(position);
 
-
-        if (emergency == null) {
-            return convertView; // added!!!!!!!!!!!!
-        }
-
         String type = (String) emergency.get("type");
         double latitude = (Double) emergency.get("latitude");
         double longitude = (Double) emergency.get("longitude");
@@ -67,7 +62,6 @@ public class EmergencyReq extends BaseAdapter {
         locationTextView.setText("Location: " + latitude + ", " + longitude);
         userIdTextView.setText("User ID: " + userId);
 
-        // Set status text and color based on the status value
         if (status == 1) {
             statusTextView.setText("Accepted");
             statusTextView.setTextColor(context.getResources().getColor(R.color.status1));
