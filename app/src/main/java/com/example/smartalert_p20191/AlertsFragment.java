@@ -9,9 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -23,6 +25,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,8 +33,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class AlertsFragment extends Fragment implements OnMapReadyCallback {
@@ -39,6 +45,8 @@ public class AlertsFragment extends Fragment implements OnMapReadyCallback {
     private MapView mapView;
     private GoogleMap googleMap;
     private List<Map<String, Object>> emergencies;
+    private CardView infoCardView;
+    private TextView dateTextView, commentTextView, locationTextView;
 
     @Nullable
     @Override
@@ -49,8 +57,16 @@ public class AlertsFragment extends Fragment implements OnMapReadyCallback {
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
+        infoCardView = view.findViewById(R.id.info_card);
+        dateTextView = view.findViewById(R.id.dateTextView);
+        commentTextView = view.findViewById(R.id.commentTextView);
+        locationTextView = view.findViewById(R.id.locationTextView);
+
         emergencies = new ArrayList<>();
         loadEmergenciesFromFirebase();
+
+        // Απόκρυψη του CardView μέχρι να επιλεχθεί ένας marker
+        infoCardView.setVisibility(View.GONE);
 
         return view;
     }
@@ -85,7 +101,32 @@ public class AlertsFragment extends Fragment implements OnMapReadyCallback {
         this.googleMap = googleMap;
 
         LatLng defaultLocation = new LatLng(37.9838, 23.7275); // Αθήνα, Ελλάδα
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 10));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 11));
+
+        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                // Ανάκτηση των πληροφοριών από τον marker
+                Map<String, Object> emergency = (Map<String, Object>) marker.getTag();
+                if (emergency != null) {
+                    // Ενημέρωση του CardView με τα δεδομένα
+                    String comments = (String) emergency.get("comments");
+                    long timestamp = (long) emergency.get("timestamp");
+                    double latitude = (double) emergency.get("latitude");
+                    double longitude = (double) emergency.get("longitude");
+
+                    String formattedDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).format(new Date(timestamp));
+                    String locationText = "Lat: " + latitude + ", Lon: " + longitude;
+
+                    dateTextView.setText("Date: " + formattedDate);
+                    commentTextView.setText("Comments: " + comments);
+                    locationTextView.setText(locationText);
+
+                    infoCardView.setVisibility(View.VISIBLE);
+                }
+                return true;
+            }
+        });
 
         updateMapMarkers();
     }
@@ -117,12 +158,12 @@ public class AlertsFragment extends Fragment implements OnMapReadyCallback {
                     break;
             }
 
-            markerOptions.icon(icon);
-            googleMap.addMarker(markerOptions);
+            Marker marker = googleMap.addMarker(markerOptions.icon(icon));
+            marker.setTag(emergency);  // Αποθήκευση των πληροφοριών του περιστατικού στον marker
         }
     }
 
-    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+    private BitmapDescriptor bitmapDescriptorFromVector(@NonNull Context context, int vectorResId) {
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
         vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
         Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
