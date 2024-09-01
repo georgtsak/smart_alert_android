@@ -1,5 +1,9 @@
 package com.example.smartalert_p20191;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +12,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -15,6 +20,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -60,7 +67,6 @@ public class AlertsFragment extends Fragment implements OnMapReadyCallback {
                         emergencies.add(emergency);
                     }
                 }
-                // Ενημέρωση του χάρτη μόλις φορτωθούν τα δεδομένα
                 if (googleMap != null) {
                     updateMapMarkers();
                 }
@@ -78,11 +84,9 @@ public class AlertsFragment extends Fragment implements OnMapReadyCallback {
         MapsInitializer.initialize(requireContext());
         this.googleMap = googleMap;
 
-        // Μπορείς να μετακινήσεις την κάμερα σε μια προεπιλεγμένη τοποθεσία αν θέλεις
-        LatLng defaultLocation = new LatLng(37.9838, 23.7275); // Συντεταγμένες για Αθήνα, Ελλάδα
+        LatLng defaultLocation = new LatLng(37.9838, 23.7275); // Αθήνα, Ελλάδα
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 10));
 
-        // Προσθήκη markers μόλις ο χάρτης είναι έτοιμος
         updateMapMarkers();
     }
 
@@ -94,8 +98,37 @@ public class AlertsFragment extends Fragment implements OnMapReadyCallback {
             String type = (String) emergency.get("type");
 
             LatLng position = new LatLng(latitude, longitude);
-            googleMap.addMarker(new MarkerOptions().position(position).title(type));
+            MarkerOptions markerOptions = new MarkerOptions().position(position).title(type);
+
+            // Επιλογή και δημιουργία εικονιδίου για τον marker από vector asset
+            BitmapDescriptor icon;
+            switch (type.toLowerCase()) {
+                case "fire":
+                    icon = bitmapDescriptorFromVector(requireContext(), R.drawable.baseline_local_fire_department_24);
+                    break;
+                case "earthquake":
+                    icon = bitmapDescriptorFromVector(requireContext(), R.drawable.baseline_area_chart_24);
+                    break;
+                case "flood":
+                    icon = bitmapDescriptorFromVector(requireContext(), R.drawable.baseline_flood_24);
+                    break;
+                default:
+                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+                    break;
+            }
+
+            markerOptions.icon(icon);
+            googleMap.addMarker(markerOptions);
         }
+    }
+
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
     @Override
