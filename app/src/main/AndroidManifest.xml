@@ -16,21 +16,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartAlert_p20191"
         tools:targetApi="31">
+
         <activity
             android:name=".EmergencyGroup"
             android:exported="false" />
+
         <activity
             android:name=".Requests2Activity"
             android:exported="false" />
+
         <activity
             android:name=".LogoutActivity"
             android:exported="false" />
+
         <activity
             android:name=".EmployeeActivity"
             android:exported="false" />
+
         <activity
             android:name=".UserActivity"
             android:exported="false" />
+
         <activity
             android:name=".IndexActivity"
             android:exported="true">
@@ -40,10 +46,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".AuthActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCsjE9FpIdfsbxYDvsKm8eTFr4aZm-skbc"/>
+
     </application>
 
 </manifest>
