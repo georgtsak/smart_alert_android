@@ -46,7 +46,7 @@ public class AlertsFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap googleMap;
     private List<Map<String, Object>> emergencies;
     private CardView infoCardView;
-    private TextView dateTextView, commentTextView, locationTextView;
+    private TextView dateTextView, commentTextView, locationTextView, textView2;
 
     @Nullable
     @Override
@@ -61,6 +61,7 @@ public class AlertsFragment extends Fragment implements OnMapReadyCallback {
         dateTextView = view.findViewById(R.id.dateTextView);
         commentTextView = view.findViewById(R.id.commentTextView);
         locationTextView = view.findViewById(R.id.locationTextView);
+        textView2= view.findViewById(R.id.textView2);
 
         emergencies = new ArrayList<>();
         loadEmergenciesFromFirebase();
@@ -101,7 +102,7 @@ public class AlertsFragment extends Fragment implements OnMapReadyCallback {
         this.googleMap = googleMap;
 
         LatLng defaultLocation = new LatLng(37.9838, 23.7275); // Αθήνα, Ελλάδα
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 11));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 10));
 
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -123,6 +124,7 @@ public class AlertsFragment extends Fragment implements OnMapReadyCallback {
                     locationTextView.setText(locationText);
 
                     infoCardView.setVisibility(View.VISIBLE);
+                    textView2.setVisibility(View.GONE);
                 }
                 return true;
             }
