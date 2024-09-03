@@ -89,6 +89,7 @@ public class AuthActivity extends AppCompatActivity {
     private void saveUser(FirebaseUser firebaseUser, String firstname, String lastname, String email) {
         String userId = firebaseUser.getUid();
         String role = "registered_user"; // default role gia olous tous neous xrhstes
+        //String role = "employee"; //dhmiourgia employee
 
         Map<String, Object> user = new HashMap<>();
         user.put("email", email);
@@ -130,7 +131,8 @@ public class AuthActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         String role = documentSnapshot.getString("role");
-                        if (role.equals(expected_role)) {
+                        Log.d("AuthActivity", "Retrieved role: " + role);
+                        if (role != null && role.equals(expected_role)) {
                             if ("registered_user".equals(role)) {
                                 startActivity(new Intent(AuthActivity.this, UserActivity.class));
                             } else if ("employee".equals(role)) {
@@ -141,9 +143,15 @@ public class AuthActivity extends AppCompatActivity {
                             mAuth.signOut(); // Αποσύνδεση του χρήστη
                         }
                         finish();
+                    } else {
+                        Log.e("AuthActivity", "No document found for user ID: " + userId);
+                        Toast.makeText(AuthActivity.this, "No document found for user.", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .addOnFailureListener(e -> Toast.makeText(AuthActivity.this, "Failed to retrieve user role.", Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> {
+                    Log.e("AuthActivity", "Failed to retrieve user role.", e);
+                    Toast.makeText(AuthActivity.this, "Failed to retrieve user role.", Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void updateUIForAuthMode() {

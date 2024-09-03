@@ -101,7 +101,7 @@ public class AlertsFragment extends Fragment implements OnMapReadyCallback {
         MapsInitializer.initialize(requireContext());
         this.googleMap = googleMap;
 
-        LatLng defaultLocation = new LatLng(37.9838, 23.7275); // Αθήνα, Ελλάδα
+        LatLng defaultLocation = new LatLng(38.0138, 23.7675); // Αθήνα, Ελλάδα
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 10));
 
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
