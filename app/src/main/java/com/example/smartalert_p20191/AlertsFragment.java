@@ -80,8 +80,13 @@ public class AlertsFragment extends Fragment implements OnMapReadyCallback {
                 emergencies.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Map<String, Object> emergency = (Map<String, Object>) snapshot.getValue();
-                    if (emergency != null) {
-                        emergencies.add(emergency);
+                    if (emergency != null && emergency.containsKey("status")) {
+                        long status = (long) emergency.get("status");
+                        // prepei to emergency na exei ginei accepted
+                        //alliws den tha emfanistei ston xarth
+                        if (status == 1) {
+                            emergencies.add(emergency);
+                        }
                     }
                 }
                 if (googleMap != null) {
