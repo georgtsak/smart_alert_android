@@ -28,7 +28,7 @@ public class ConfirmedFragment extends Fragment {
     private ListView listView;
     private EmergencyGroup adapter;
     private List<Map<String, Object>> groupedEmergencies;
-    private static final double MAX_DISTANCE = 10;
+    private static final double MAX_DISTANCE = 40;
 
     @Nullable
     @Override
