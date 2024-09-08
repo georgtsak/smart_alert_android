@@ -38,9 +38,9 @@
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="wrap_content"
-        android:layout_height="170dp"
-        android:minWidth="170dp"
-        android:layout_marginTop="70dp"
+        android:layout_height="210dp"
+        android:minWidth="210dp"
+        android:layout_marginTop="60dp"
         app:layout_constraintBottom_toTopOf="@+id/materialCardView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
