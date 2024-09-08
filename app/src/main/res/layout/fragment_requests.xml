@@ -43,11 +43,23 @@
         android:id="@+id/emergency_list"
         android:layout_width="wrap_content"
         android:layout_height="450dp"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
+
+    <Spinner
+        android:id="@+id/spinner2"
+        style="@style/spinner_style"
+        android:layout_width="280dp"
+        android:layout_height="44dp"
+        android:spinnerMode="dropdown"
+        android:background="@drawable/custom2"
+        app:layout_constraintBottom_toTopOf="@+id/emergency_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
