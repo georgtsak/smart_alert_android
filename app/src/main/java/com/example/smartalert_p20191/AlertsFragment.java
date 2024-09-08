@@ -101,16 +101,15 @@ public class AlertsFragment extends Fragment implements OnMapReadyCallback {
         MapsInitializer.initialize(requireContext());
         this.googleMap = googleMap;
 
-        LatLng defaultLocation = new LatLng(38.0138, 23.7675); // Αθήνα, Ελλάδα
+        LatLng defaultLocation = new LatLng(38.0138, 23.7675); // stigma gia athina
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 10));
 
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                // Ανάκτηση των πληροφοριών από τον marker
                 Map<String, Object> emergency = (Map<String, Object>) marker.getTag();
                 if (emergency != null) {
-                    // Ενημέρωση του CardView με τα δεδομένα
+                    // update twn texts tou cardview
                     String comments = (String) emergency.get("comments");
                     long timestamp = (long) emergency.get("timestamp");
                     double latitude = (double) emergency.get("latitude");
@@ -143,7 +142,6 @@ public class AlertsFragment extends Fragment implements OnMapReadyCallback {
             LatLng position = new LatLng(latitude, longitude);
             MarkerOptions markerOptions = new MarkerOptions().position(position).title(type);
 
-            // Επιλογή και δημιουργία εικονιδίου για τον marker από vector asset
             BitmapDescriptor icon;
             switch (type.toLowerCase()) {
                 case "fire":
@@ -161,7 +159,7 @@ public class AlertsFragment extends Fragment implements OnMapReadyCallback {
             }
 
             Marker marker = googleMap.addMarker(markerOptions.icon(icon));
-            marker.setTag(emergency);  // Αποθήκευση των πληροφοριών του περιστατικού στον marker
+            marker.setTag(emergency);
         }
     }
 
