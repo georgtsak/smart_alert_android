@@ -20,7 +20,7 @@
     <string name="requests">Requests</string>
     <string name="confirmed">Confirmed</string>
     <string name="confirmed2">Confirmed Incidents</string>
-    <string name="alerts">Ειδοποιήσεις</string>
+    <string name="alerts">Alerts</string>
     <string-array name="spinner_items">
         <item>Fire</item>
         <item>Earthquake</item>
