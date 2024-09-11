@@ -27,6 +27,12 @@
         <item>Flood</item>
 
     </string-array>
+    <string-array name="spinner_items2">
+        <item>All</item>
+        <item>Accepted</item>
+        <item>Pending</item>
+        <item>Rejected</item>
+    </string-array>
     <string name="myalerts">My Alerts</string>
     <string name="details">Details</string>
 </resources>
