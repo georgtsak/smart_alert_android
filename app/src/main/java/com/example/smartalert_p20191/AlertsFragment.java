@@ -66,7 +66,7 @@ public class AlertsFragment extends Fragment implements OnMapReadyCallback {
         emergencies = new ArrayList<>();
         loadEmergenciesFromFirebase();
 
-        // Απόκρυψη του CardView μέχρι να επιλεχθεί ένας marker
+        // apokrupsh tu cardview mexri na epilexthei marker
         infoCardView.setVisibility(View.GONE);
 
         return view;

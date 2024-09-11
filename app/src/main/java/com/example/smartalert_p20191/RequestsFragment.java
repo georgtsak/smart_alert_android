@@ -5,7 +5,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,13 +24,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class RequestsFragment extends Fragment {
 
     private ListView listView;
     private EmergencyReq adapter;
     private List<Map<String, Object>> emergencies;
+    private List<Map<String, Object>> all;
     private DatabaseReference reference;
+    private Spinner spinner2;
+
 
     @Nullable
     @Override
@@ -36,14 +43,34 @@ public class RequestsFragment extends Fragment {
 
         listView = view.findViewById(R.id.emergency_list);
         emergencies = new ArrayList<>();
+        all = new ArrayList<>();
         adapter = new EmergencyReq(requireContext(), emergencies);
         listView.setAdapter(adapter);
+
+        spinner2 = view.findViewById(R.id.spinner2);
+
+        // Populate spinner with options
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(requireContext(),
+                R.array.spinner_items2, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner2.setAdapter(spinnerAdapter);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         reference = database.getReference("emergencies");
 
         loadEmergenciesFromFirebase();
 
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                filterEmergenciesByStatus(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // No action needed
+            }
+        });
         return view;
     }
 
@@ -52,34 +79,52 @@ public class RequestsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 emergencies.clear();
-                List<Map<String, Object>> tempList = new ArrayList<>();
+                all.clear(); // Clear the list to avoid duplication
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Map<String, Object> emergency = (Map<String, Object>) snapshot.getValue();
                     if (emergency != null) {
-                        String type = (String) emergency.get("type");
-                        double latitude = (double) emergency.get("latitude");
-                        double longitude = (double) emergency.get("longitude");
-                        String userId = (String) emergency.get("userId");
+                        // Check if the emergency has a valid status
+                        Long status = (Long) emergency.get("status");
+                        if (status != null) {
+                            String type = (String) emergency.get("type");
+                            double latitude = (double) emergency.get("latitude");
+                            double longitude = (double) emergency.get("longitude");
+                            String userId = (String) emergency.get("userId");
 
-                        emergency.put("id", snapshot.getKey());
-                        String displayText = type + " - Lat: " + latitude + ", Lon: " + longitude + " (User ID: " + userId + ")";
-                        emergency.put("displayText", displayText);
-                        tempList.add(emergency);
+                            emergency.put("id", snapshot.getKey());
+                            String displayText = type + " - Lat: " + latitude + ", Lon: " + longitude + " (User ID: " + userId + ")";
+                            emergency.put("displayText", displayText);
+
+                            // Add emergency to both lists
+                            emergencies.add(emergency);
+                            all.add(emergency);
+                        }
                     }
                 }
 
-                // Reverse the list to show the most recent emergencies first
-                Collections.reverse(tempList);
-                emergencies.addAll(tempList);
+                Collections.reverse(emergencies);
                 adapter.notifyDataSetChanged();
             }
-
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e("RequestsFragment", "Failed to load emergencies: " + databaseError.getMessage());
             }
         });
+    }
+
+    private void filterEmergenciesByStatus(int position) {
+        if (position == 0) { // All
+            emergencies.clear();
+            emergencies.addAll(all); // Show all
+        } else {
+            long filterStatus = position - 1; // Accepted = 1, Rejected = 2, Pending = 0
+            emergencies.clear();
+            emergencies.addAll(all.stream()
+                    .filter(emergency -> emergency.get("status") != null && (long) emergency.get("status") == filterStatus)
+                    .collect(Collectors.toList()));
+        }
+        adapter.notifyDataSetChanged(); // Refresh the list
     }
 }
