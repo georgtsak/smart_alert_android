@@ -23,8 +23,8 @@
     <string-array name="spinner_items2">
         <item>Όλα</item>
         <item>Εγκριθέντα</item>
-        <item>Εκκρεμή</item>
         <item>Απορριφθέντα</item>
+        <item>Εκκρεμή</item>
     </string-array>
 
 

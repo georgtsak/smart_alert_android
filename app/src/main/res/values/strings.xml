@@ -30,8 +30,8 @@
     <string-array name="spinner_items2">
         <item>All</item>
         <item>Accepted</item>
-        <item>Pending</item>
         <item>Rejected</item>
+        <item>Pending</item>
     </string-array>
     <string name="myalerts">My Alerts</string>
     <string name="details">Details</string>
