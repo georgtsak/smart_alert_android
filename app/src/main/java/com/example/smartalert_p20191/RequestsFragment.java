@@ -113,29 +113,40 @@ public class RequestsFragment extends Fragment {
     private void filterEmergenciesByStatus(int position) {
         emergencies.clear();
 
-        if (position == 0) { //all
-            emergencies.addAll(all);
+        List<Map<String, Object>> sorted = new ArrayList<>();
+
+        if (position == 0) { // all
+            sorted.addAll(all);
         } else if (position == 1) { // accepted - status:1
             for (Map<String, Object> emergency : all) {
                 if (emergency.get("status") != null && (long) emergency.get("status") == 1) {
-                    emergencies.add(emergency);
+                    sorted.add(emergency);
                 }
             }
         } else if (position == 2) { // rejected - status:2
             for (Map<String, Object> emergency : all) {
                 if (emergency.get("status") != null && (long) emergency.get("status") == 2) {
-                    emergencies.add(emergency);
+                    sorted.add(emergency);
                 }
             }
         } else if (position == 3) { // pending - status:0
             for (Map<String, Object> emergency : all) {
                 if (emergency.get("status") != null && (long) emergency.get("status") == 0) {
-                    emergencies.add(emergency);
+                    sorted.add(emergency);
                 }
             }
         }
 
+        // sorted requests based on the most recent
+        Collections.sort(sorted, (e1, e2) -> {
+            long timestamp1 = (long) e1.get("timestamp");
+            long timestamp2 = (long) e2.get("timestamp");
+            return Long.compare(timestamp2, timestamp1);
+        });
+
+        emergencies.addAll(sorted);
         adapter.notifyDataSetChanged(); // refresh
     }
+
 
 }
