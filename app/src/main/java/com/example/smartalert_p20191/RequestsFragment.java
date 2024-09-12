@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class RequestsFragment extends Fragment {
 
@@ -49,7 +48,6 @@ public class RequestsFragment extends Fragment {
 
         spinner2 = view.findViewById(R.id.spinner2);
 
-        // Populate spinner with options
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(requireContext(),
                 R.array.spinner_items2, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -84,7 +82,6 @@ public class RequestsFragment extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Map<String, Object> emergency = (Map<String, Object>) snapshot.getValue();
                     if (emergency != null) {
-                        // Check if the emergency has a valid status
                         Long status = (Long) emergency.get("status");
                         if (status != null) {
                             String type = (String) emergency.get("type");
@@ -96,7 +93,6 @@ public class RequestsFragment extends Fragment {
                             String displayText = type + " - Lat: " + latitude + ", Lon: " + longitude + " (User ID: " + userId + ")";
                             emergency.put("displayText", displayText);
 
-                            // Add emergency to both lists
                             emergencies.add(emergency);
                             all.add(emergency);
                         }
@@ -115,16 +111,31 @@ public class RequestsFragment extends Fragment {
     }
 
     private void filterEmergenciesByStatus(int position) {
-        if (position == 0) { // All
-            emergencies.clear();
-            emergencies.addAll(all); // Show all
-        } else {
-            long filterStatus = position - 1; // Accepted = 1, Rejected = 2, Pending = 0
-            emergencies.clear();
-            emergencies.addAll(all.stream()
-                    .filter(emergency -> emergency.get("status") != null && (long) emergency.get("status") == filterStatus)
-                    .collect(Collectors.toList()));
+        emergencies.clear();
+
+        if (position == 0) { //all
+            emergencies.addAll(all);
+        } else if (position == 1) { // accepted - status:1
+            for (Map<String, Object> emergency : all) {
+                if (emergency.get("status") != null && (long) emergency.get("status") == 1) {
+                    emergencies.add(emergency);
+                }
+            }
+        } else if (position == 2) { // rejected - status:2
+            for (Map<String, Object> emergency : all) {
+                if (emergency.get("status") != null && (long) emergency.get("status") == 2) {
+                    emergencies.add(emergency);
+                }
+            }
+        } else if (position == 3) { // pending - status:0
+            for (Map<String, Object> emergency : all) {
+                if (emergency.get("status") != null && (long) emergency.get("status") == 0) {
+                    emergencies.add(emergency);
+                }
+            }
         }
-        adapter.notifyDataSetChanged(); // Refresh the list
+
+        adapter.notifyDataSetChanged(); // refresh
     }
+
 }
