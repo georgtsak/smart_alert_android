@@ -20,6 +20,12 @@
     <string name="submission">Υποβολή</string>
     <string name="confirmed">Επιβεβαιωμένο</string>
     <string name="alerts">Ειδοποιήσεις</string>
+    <string-array name="spinner_items2">
+        <item>Όλα</item>
+        <item>Εγκριθέντα</item>
+        <item>Εκκρεμή</item>
+        <item>Απορριφθέντα</item>
+    </string-array>
 
 
 
