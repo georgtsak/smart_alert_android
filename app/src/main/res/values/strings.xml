@@ -35,4 +35,8 @@
     </string-array>
     <string name="myalerts">My Alerts</string>
     <string name="details">Details</string>
+    <string name="accepted">Accepted</string>
+    <string name="rejected">Rejected</string>
+    <string name="pending">Pending</string>
+
 </resources>

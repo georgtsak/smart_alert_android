@@ -26,6 +26,11 @@
         <item>Απορριφθέντα</item>
         <item>Εκκρεμή</item>
     </string-array>
+    <string name="accepted">Εγκριθέντα</string>
+    <string name="rejected">Απορριφθέντα</string>
+    <string name="pending">Εκκρεμή</string>
+    <string name="statistics">Στατιστικά</string>
+
 
 
 
