@@ -56,10 +56,8 @@ public class SettingsFragment extends Fragment {
 
         updateLocationSwitch();
 
-        // Set listener for the switch
         locationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (!isChecked) {
-                // Prompt the user to enable location permissions
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
             }
         });
@@ -83,10 +81,8 @@ public class SettingsFragment extends Fragment {
                     updateBg(role);
 
                 } else {
-                    // handle case where document does not exist
                 }
             } else {
-                // handle task failure
             }
         });
     }

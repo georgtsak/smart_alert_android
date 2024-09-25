@@ -15,7 +15,7 @@ public class UserActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-        // Set default fragment
+        // default fragment
         if (savedInstanceState == null) {
             loadFragment(new SubmissionFragment());
         }

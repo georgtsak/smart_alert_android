@@ -55,7 +55,6 @@ public class Requests2Activity extends AppCompatActivity {
         locationTextView.setText("Location: " + latitude + ", " + longitude);
         SpannableString spannable = new SpannableString("Status: " + (status == 0 ? "Pending" : status == 1 ? "Accepted" : "Rejected"));
 
-// Set color for "Pending", "Accepted", or "Rejected"
         int color;
         if (status == 1) {
             color = getResources().getColor(R.color.status1);
@@ -65,14 +64,9 @@ public class Requests2Activity extends AppCompatActivity {
             color = getResources().getColor(R.color.status0);
         }
 
-// Find the index where the status text starts
         int statusTextStart = "Status: ".length();
-
-// Apply color only to the status text
         spannable.setSpan(new ForegroundColorSpan(color), statusTextStart, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
         statusTextView.setText(spannable);
-
 
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -81,7 +75,7 @@ public class Requests2Activity extends AppCompatActivity {
             emergencyImageView.setImageResource(R.drawable.baseline_photo_24); // Default image resource
         }
 
-        // an to request den einai pending   tote ta koubia accept kai reject tha ginoun hidden
+        // an to request den einai pending tote ta koubia accept kai reject tha ginoun hidden
         if (status != 0) {
             acceptButton.setVisibility(View.GONE);
             rejectButton.setVisibility(View.GONE);
