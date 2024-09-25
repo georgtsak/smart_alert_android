@@ -66,7 +66,6 @@ public class RequestsFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // No action needed
             }
         });
         return view;
@@ -77,7 +76,7 @@ public class RequestsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 emergencies.clear();
-                all.clear(); // Clear the list to avoid duplication
+                all.clear(); // katharisma
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Map<String, Object> emergency = (Map<String, Object>) snapshot.getValue();
@@ -137,7 +136,7 @@ public class RequestsFragment extends Fragment {
             }
         }
 
-        // sorted requests based on the most recent
+        // sorted req based on the most recent
         Collections.sort(sorted, (e1, e2) -> {
             long timestamp1 = (long) e1.get("timestamp");
             long timestamp2 = (long) e2.get("timestamp");

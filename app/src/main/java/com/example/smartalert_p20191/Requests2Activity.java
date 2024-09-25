@@ -72,7 +72,7 @@ public class Requests2Activity extends AppCompatActivity {
         if (imageUrl != null && !imageUrl.isEmpty()) {
             Glide.with(this).load(imageUrl).into(emergencyImageView);
         } else {
-            emergencyImageView.setImageResource(R.drawable.baseline_photo_24); // Default image resource
+            emergencyImageView.setImageResource(R.drawable.baseline_photo_24); // default
         }
 
         // an to request den einai pending tote ta koubia accept kai reject tha ginoun hidden
