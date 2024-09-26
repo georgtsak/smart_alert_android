@@ -41,7 +41,7 @@ public class SettingsFragment extends Fragment {
         Email = view.findViewById(R.id.email);
         locationSwitch = view.findViewById(R.id.locationSwitch);
         ButtonBlue = view.findViewById(R.id.logout_button);
-        darkMode1 = view.findViewById(R.id.darkMode1);
+        //darkMode1 = view.findViewById(R.id.darkMode1);
         Language1 = view.findViewById(R.id.Language1);
         Location1 = view.findViewById(R.id.Location1);
 
@@ -98,12 +98,12 @@ public class SettingsFragment extends Fragment {
     private void updateBg(String role) {
         if ("registered_user".equals(role)) {
             ButtonBlue.setBackgroundResource(R.drawable.color_red_button);
-            darkMode1.setBackgroundResource(R.drawable.bg_red_radius);
+            //darkMode1.setBackgroundResource(R.drawable.bg_red_radius);
             Language1.setBackgroundResource(R.drawable.bg_red_radius);
             Location1.setBackgroundResource(R.drawable.bg_red_radius);
         } else if ("employee".equals(role)) {
             ButtonBlue.setBackgroundResource(R.drawable.color_blue_button);
-            darkMode1.setBackgroundResource(R.drawable.bg_blue_radius);
+            //darkMode1.setBackgroundResource(R.drawable.bg_blue_radius);
             Language1.setBackgroundResource(R.drawable.bg_blue_radius);
             Location1.setBackgroundResource(R.drawable.bg_blue_radius);
 
