@@ -1,6 +1,7 @@
 package com.example.smartalert_p20191;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,13 +55,18 @@ public class EmergencyGroup extends BaseAdapter {
         ImageView imageView = convertView.findViewById(R.id.groupedImageView);
         Button alertButton = convertView.findViewById(R.id.alertButton);
 
-
         Map<String, Object> emergency = groupedEmergencies.get(position);
 
         String type = (String) emergency.get("type");
         double latitude = (Double) emergency.get("latitude");
         double longitude = (Double) emergency.get("longitude");
         int count = (Integer) emergency.get("count");
+
+        // unique key using location
+        String emergencyKey = latitude + "_" + longitude;
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("AlertPrefs", Context.MODE_PRIVATE);
+        boolean isAlertSent = sharedPreferences.getBoolean(emergencyKey, false);
 
         typeTextView.setText("Type: " + type);
         locationTextView.setText("Location: " + latitude + ", " + longitude);
@@ -71,40 +77,48 @@ public class EmergencyGroup extends BaseAdapter {
             alertButton.setVisibility(View.VISIBLE);
         } else if (count > 6) {
             imageView.setImageResource(R.drawable.baseline_filter_3_24); // level 3 --> orange
-            alertButton.setVisibility(View.GONE); // hide button
+            alertButton.setVisibility(View.GONE);
         } else if (count > 3) {
             imageView.setImageResource(R.drawable.baseline_filter_2_24); // level 2 --> yellow
-            alertButton.setVisibility(View.GONE); // hide
+            alertButton.setVisibility(View.GONE);
         } else {
             imageView.setImageResource(R.drawable.baseline_filter_1_24); // level 1 --> green
-            alertButton.setVisibility(View.GONE); // hide
+            alertButton.setVisibility(View.GONE);
         }
 
-        alertButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Δημιουργία νέου alert και αποθήκευση στο Firebase
-                DatabaseReference alertsRef = FirebaseDatabase.getInstance().getReference("alerts");
+        if (isAlertSent) {
+            alertButton.setEnabled(false);
+            alertButton.setText("Alert sent");
+        } else {
+            alertButton.setEnabled(true);
+            alertButton.setText("Send alert");
 
-                String alertId = alertsRef.push().getKey();
-                if (alertId != null) {
-                    Map<String, Object> alert = new HashMap<>();
-                    alert.put("type", type);
-                    alert.put("latitude", latitude);
-                    alert.put("longitude", longitude);
-                    alert.put("timestamp", System.currentTimeMillis());
+            alertButton.setOnClickListener(v -> {
+                // Save to Realtime Database
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("alerts");
+                Map<String, Object> alertData = new HashMap<>();
+                alertData.put("latitude", latitude);
+                alertData.put("longitude", longitude);
+                alertData.put("timestamp", System.currentTimeMillis());
 
-                    // Αποθήκευση του alert στη βάση δεδομένων
-                    alertsRef.child(alertId).setValue(alert)
-                            .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(context, "Alert sent successfully", Toast.LENGTH_SHORT).show();
-                            })
-                            .addOnFailureListener(e -> {
-                                Toast.makeText(context, "Failed to send alert", Toast.LENGTH_SHORT).show();
-                            });
-                }
-            }
-        });
+                databaseReference.push().setValue(alertData)
+                        .addOnSuccessListener(aVoid -> {
+                            // Disable the button
+                            alertButton.setEnabled(false);
+                            alertButton.setText("Alert sent");
+
+                            // Save the state to SharedPreferences
+                            sharedPreferences.edit().putBoolean(emergencyKey, true).apply();
+
+                            // Show a Toast message
+                            Toast.makeText(context, "Alert sent successfully!", Toast.LENGTH_SHORT).show();
+                        })
+                        .addOnFailureListener(e -> {
+                            // Show error Toast
+                            Toast.makeText(context, "Failed to send alert!", Toast.LENGTH_SHORT).show();
+                        });
+            });
+        }
 
         return convertView;
     }

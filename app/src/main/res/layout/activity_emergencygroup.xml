@@ -48,12 +48,11 @@
 
     <Button
         android:id="@+id/alertButton"
-        android:layout_width="80dp"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_marginStart="200dp"
-        android:text="Alert"
+        android:layout_marginStart="190dp"
+        android:text="Send alert"
         android:textSize="12sp"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/groupedImageView"
         app:layout_constraintStart_toStartOf="parent"
