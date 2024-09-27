@@ -17,44 +17,78 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+
 
 public class MyAlertsFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private MapView mapView;
     private FusedLocationProviderClient fusedLocationClient;
-    private Location alertLocation;
     private Location userLocation;
+    private Location alertLocation;
+    private DatabaseReference alertsRef;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private static final float ALERT_RADIUS_METERS = 20000; //20xiliometra
+
+    private SupportMapFragment mapFragment;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_myalerts, container, false);
 
-        mapView = view.findViewById(R.id.mapView2);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
-
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapView2);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+        alertsRef = FirebaseDatabase.getInstance().getReference("alerts");
 
-        //alertLocation = new Location("");
-        //alertLocation.setLatitude(38.0138);  // Example latitude (San Francisco)
-        //alertLocation.setLongitude(23.7675); // Example longitude (San Francisco)
-
-        // Request location permission if not already granted
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         } else {
             getUserLocation();
         }
 
+        listenForAlertUpdates();
+
         return view;
+    }
+
+    private void listenForAlertUpdates() {
+        alertsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Alert alert = snapshot.getValue(Alert.class);
+                    if (alert != null) {
+                        alertLocation = new Location("");
+                        alertLocation.setLatitude(alert.getLatitude());
+                        alertLocation.setLongitude(alert.getLongitude());
+                        updateMap();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle possible errors
+            }
+        });
     }
 
     private void getUserLocation() {
@@ -77,52 +111,62 @@ public class MyAlertsFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void updateMap() {
-        if (mMap != null && userLocation != null) {
-            LatLng userLatLng = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
+        if (mMap != null) {
+            mMap.clear(); // Clear any previous markers or circles
 
-            // Add marker for user
-            mMap.addMarker(new MarkerOptions()
-                    .position(userLatLng)
-                    .title("Your Location")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+            if (userLocation != null) {
+                LatLng userLatLng = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
+                mMap.addMarker(new MarkerOptions()
+                        .position(userLatLng)
+                        .title("Your Location")
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 10));
+            }
 
-            // Move and zoom the camera to the user's location
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 12));
-        }
+            if (alertLocation != null) {
+                LatLng alertLatLng = new LatLng(alertLocation.getLatitude(), alertLocation.getLongitude());
 
-        if (mMap != null && alertLocation != null) {
-            LatLng alertLatLng = new LatLng(alertLocation.getLatitude(), alertLocation.getLongitude());
-
-            // Add marker for alert
-            mMap.addMarker(new MarkerOptions()
-                    .position(alertLatLng)
-                    .title("Alert Location")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                // Add a transparent circle around the alert location
+                mMap.addCircle(new CircleOptions()
+                        .center(alertLatLng)
+                        .radius(ALERT_RADIUS_METERS)
+                        .strokeColor(0xFFFF0000) // Red border
+                        .fillColor(0x30FF0000)   // Red transparent fill
+                        .strokeWidth(2));
+            }
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mapView.onResume();
+        if (mapFragment != null) {
+            mapFragment.onResume();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mapView.onPause();
+        if (mapFragment != null) {
+            mapFragment.onPause();
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mapView.onDestroy();
+        if (mapFragment != null) {
+            mapFragment.onDestroy();
+        }
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mapView.onLowMemory();
+        if (mapFragment != null) {
+            mapFragment.onLowMemory();
+        }
     }
 
     @Override
