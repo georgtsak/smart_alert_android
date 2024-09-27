@@ -108,7 +108,7 @@ public class AlertServ extends Service {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                repeatCount = 0;  // Reset repeat count
+                repeatCount = 0;
                 repeatMessage();
             }
         }, 5000);

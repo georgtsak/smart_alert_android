@@ -166,14 +166,14 @@ public class AuthActivity extends AppCompatActivity {
             lastname.setVisibility(View.VISIBLE);
             createAccount.setVisibility(View.VISIBLE);
             loginButton.setVisibility(View.GONE);
-            switchText.setText("Έχετε ήδη λογαριασμό; Συνδεθείτε");
+            switchText.setText("Already have an account? Log in");
             switchText.setVisibility(View.VISIBLE);
         } else {
             firstname.setVisibility(View.GONE);
             lastname.setVisibility(View.GONE);
             createAccount.setVisibility(View.GONE);
             loginButton.setVisibility(View.VISIBLE);
-            switchText.setText("Δεν έχετε λογαριασμό; Δημιουργήστε έναν");
+            switchText.setText("Don't have an account? Create one");
             switchText.setVisibility(View.VISIBLE);
         }
     }
