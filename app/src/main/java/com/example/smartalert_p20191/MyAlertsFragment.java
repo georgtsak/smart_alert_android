@@ -42,7 +42,7 @@ public class MyAlertsFragment extends Fragment implements OnMapReadyCallback {
     private Location alertLocation;
     private DatabaseReference alertsRef;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private static final float ALERT_RADIUS_METERS = 20000; //20xiliometra
+    private static final float ALERT_RADIUS_METERS = 20000; //20 xiliometra
 
     private SupportMapFragment mapFragment;
 
@@ -86,7 +86,6 @@ public class MyAlertsFragment extends Fragment implements OnMapReadyCallback {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle possible errors
             }
         });
     }
@@ -112,26 +111,26 @@ public class MyAlertsFragment extends Fragment implements OnMapReadyCallback {
 
     private void updateMap() {
         if (mMap != null) {
-            mMap.clear(); // Clear any previous markers or circles
+            mMap.clear();
 
             if (userLocation != null) {
                 LatLng userLatLng = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
                 mMap.addMarker(new MarkerOptions()
                         .position(userLatLng)
                         .title("Your Location")
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 10));
             }
 
             if (alertLocation != null) {
                 LatLng alertLatLng = new LatLng(alertLocation.getLatitude(), alertLocation.getLongitude());
 
-                // Add a transparent circle around the alert location
+                // kokkinos kuklos
                 mMap.addCircle(new CircleOptions()
                         .center(alertLatLng)
                         .radius(ALERT_RADIUS_METERS)
-                        .strokeColor(0xFFFF0000) // Red border
-                        .fillColor(0x30FF0000)   // Red transparent fill
+                        .strokeColor(0xFFFF0000) // perigramma
+                        .fillColor(0x30FF0000)   // kokkino periexomeno
                         .strokeWidth(2));
             }
         }
