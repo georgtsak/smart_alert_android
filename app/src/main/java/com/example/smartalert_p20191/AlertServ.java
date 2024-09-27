@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
 import android.widget.Toast;
@@ -30,7 +31,9 @@ public class AlertServ extends Service {
     private DatabaseReference alertsRef;
     private FusedLocationProviderClient fusedLocationClient;
     private TextToSpeech textToSpeech;
-    private MediaPlayer emergencySoundPlayer;  // Add MediaPlayer instance
+    private MediaPlayer emergencySoundPlayer;
+    private Handler handler = new Handler(); //gia to delay
+    private int repeatCount = 0;
 
     @Override
     public void onCreate() {
@@ -38,7 +41,6 @@ public class AlertServ extends Service {
         alertsRef = FirebaseDatabase.getInstance().getReference("alerts");
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        // Initialize TextToSpeech
         textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -48,8 +50,7 @@ public class AlertServ extends Service {
             }
         });
 
-        // Initialize MediaPlayer for emergency sound
-        emergencySoundPlayer = MediaPlayer.create(this, R.raw.sound);  // Ensure you have a raw resource named emergency_sound
+        emergencySoundPlayer = MediaPlayer.create(this, R.raw.sound);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(this, "Location permission is required", Toast.LENGTH_SHORT).show();
@@ -104,22 +105,33 @@ public class AlertServ extends Service {
         if (emergencySoundPlayer != null) {
             emergencySoundPlayer.start();
         }
-
-        new android.os.Handler().postDelayed(new Runnable() {
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                // epanalhpsh text_to_speech msg gia 2 fores
-                String alertMessage = "Emergency alert nearby! Please take caution.";
-                for (int i = 0; i < 2; i++) {
-                    textToSpeech.speak(alertMessage, TextToSpeech.QUEUE_ADD, null, null);
-                }
+                repeatCount = 0;  // Reset repeat count
+                repeatMessage();
             }
         }, 5000);
     }
 
+    private void repeatMessage() {
+        if (repeatCount < 3) {
+            String alertMessage = "Emergency alert nearby! Please take caution.";
+            textToSpeech.speak(alertMessage, TextToSpeech.QUEUE_FLUSH, null, null);
+            Toast.makeText(this, alertMessage, Toast.LENGTH_SHORT).show();
+            repeatCount++;
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    repeatMessage();
+                }
+            }, 3500);
+        }
+    }
+
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        // Service is started
         return START_STICKY;
     }
 
@@ -141,5 +153,6 @@ public class AlertServ extends Service {
         return null;
     }
 }
+
 
 
