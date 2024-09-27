@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,10 +28,9 @@ public class SettingsFragment extends Fragment {
     private TextView Name1, Email;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    private Switch locationSwitch;
+    private Switch locationSwitch, greekSwitch;
     private Button ButtonBlue;
-    private ImageView darkMode1, Language1, Location1;
-
+    private ImageView Language1, Location1;
 
     @Nullable
     @Override
@@ -40,11 +40,10 @@ public class SettingsFragment extends Fragment {
         Name1 = view.findViewById(R.id.firstname_lastname);
         Email = view.findViewById(R.id.email);
         locationSwitch = view.findViewById(R.id.locationSwitch);
+        greekSwitch = view.findViewById(R.id.GreekSwitch);
         ButtonBlue = view.findViewById(R.id.logout_button);
-        //darkMode1 = view.findViewById(R.id.darkMode1);
         Language1 = view.findViewById(R.id.Language1);
         Location1 = view.findViewById(R.id.Location1);
-
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -59,6 +58,13 @@ public class SettingsFragment extends Fragment {
         locationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (!isChecked) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+            }
+        });
+
+        greekSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                Toast.makeText(getContext(), "Feature not available", Toast.LENGTH_SHORT).show();
+                greekSwitch.setChecked(false);
             }
         });
 
@@ -79,10 +85,7 @@ public class SettingsFragment extends Fragment {
                     Name1.setText(firstname + " " + lastname);
                     Email.setText(email);
                     updateBg(role);
-
-                } else {
                 }
-            } else {
             }
         });
     }
@@ -98,15 +101,12 @@ public class SettingsFragment extends Fragment {
     private void updateBg(String role) {
         if ("registered_user".equals(role)) {
             ButtonBlue.setBackgroundResource(R.drawable.color_red_button);
-            //darkMode1.setBackgroundResource(R.drawable.bg_red_radius);
             Language1.setBackgroundResource(R.drawable.bg_red_radius);
             Location1.setBackgroundResource(R.drawable.bg_red_radius);
         } else if ("employee".equals(role)) {
             ButtonBlue.setBackgroundResource(R.drawable.color_blue_button);
-            //darkMode1.setBackgroundResource(R.drawable.bg_blue_radius);
             Language1.setBackgroundResource(R.drawable.bg_blue_radius);
             Location1.setBackgroundResource(R.drawable.bg_blue_radius);
-
         }
     }
 }
