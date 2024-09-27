@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
 import android.widget.Toast;
@@ -28,7 +29,8 @@ public class AlertServ extends Service {
     private Location userLocation;
     private DatabaseReference alertsRef;
     private FusedLocationProviderClient fusedLocationClient;
-    private TextToSpeech textToSpeech;  // Add TextToSpeech instance
+    private TextToSpeech textToSpeech;
+    private MediaPlayer emergencySoundPlayer;  // Add MediaPlayer instance
 
     @Override
     public void onCreate() {
@@ -41,10 +43,13 @@ public class AlertServ extends Service {
             @Override
             public void onInit(int status) {
                 if (status == TextToSpeech.SUCCESS) {
-                    textToSpeech.setLanguage(Locale.US);  // Set language to English (US)
+                    textToSpeech.setLanguage(Locale.US);
                 }
             }
         });
+
+        // Initialize MediaPlayer for emergency sound
+        emergencySoundPlayer = MediaPlayer.create(this, R.raw.sound);  // Ensure you have a raw resource named emergency_sound
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(this, "Location permission is required", Toast.LENGTH_SHORT).show();
@@ -91,14 +96,25 @@ public class AlertServ extends Service {
         alertLocation.setLongitude(alert.getLongitude());
 
         float distanceInMeters = userLocation.distanceTo(alertLocation);
-        return distanceInMeters <= 20000; // 20 kilometers
+        return distanceInMeters <= 20000; // 20 xiliometra
     }
 
     private void showEmergencyAlert() {
-        Toast.makeText(this, "Emergency alert nearby!", Toast.LENGTH_LONG).show();
+        // Play emergency sound
+        if (emergencySoundPlayer != null) {
+            emergencySoundPlayer.start();
+        }
 
-        String alertMessage = "Alert! Emergency alert nearby! Please take caution.";
-        textToSpeech.speak(alertMessage, TextToSpeech.QUEUE_FLUSH, null, null);
+        new android.os.Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // epanalhpsh text_to_speech msg gia 2 fores
+                String alertMessage = "Emergency alert nearby! Please take caution.";
+                for (int i = 0; i < 2; i++) {
+                    textToSpeech.speak(alertMessage, TextToSpeech.QUEUE_ADD, null, null);
+                }
+            }
+        }, 5000);
     }
 
     @Override
@@ -110,10 +126,12 @@ public class AlertServ extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // Clean up TextToSpeech
         if (textToSpeech != null) {
             textToSpeech.stop();
             textToSpeech.shutdown();
+        }
+        if (emergencySoundPlayer != null) {
+            emergencySoundPlayer.release();
         }
     }
 
@@ -123,4 +141,5 @@ public class AlertServ extends Service {
         return null;
     }
 }
+
 
