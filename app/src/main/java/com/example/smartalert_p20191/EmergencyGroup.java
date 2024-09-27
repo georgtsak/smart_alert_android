@@ -8,7 +8,12 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -74,6 +79,32 @@ public class EmergencyGroup extends BaseAdapter {
             imageView.setImageResource(R.drawable.baseline_filter_1_24); // level 1 --> green
             alertButton.setVisibility(View.GONE); // hide
         }
+
+        alertButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Δημιουργία νέου alert και αποθήκευση στο Firebase
+                DatabaseReference alertsRef = FirebaseDatabase.getInstance().getReference("alerts");
+
+                String alertId = alertsRef.push().getKey();
+                if (alertId != null) {
+                    Map<String, Object> alert = new HashMap<>();
+                    alert.put("type", type);
+                    alert.put("latitude", latitude);
+                    alert.put("longitude", longitude);
+                    alert.put("timestamp", System.currentTimeMillis());
+
+                    // Αποθήκευση του alert στη βάση δεδομένων
+                    alertsRef.child(alertId).setValue(alert)
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(context, "Alert sent successfully", Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(context, "Failed to send alert", Toast.LENGTH_SHORT).show();
+                            });
+                }
+            }
+        });
 
         return convertView;
     }
