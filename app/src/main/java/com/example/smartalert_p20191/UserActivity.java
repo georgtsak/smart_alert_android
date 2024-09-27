@@ -1,8 +1,11 @@
 package com.example.smartalert_p20191;
 
+import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class UserActivity extends AppCompatActivity {
@@ -37,6 +40,8 @@ public class UserActivity extends AppCompatActivity {
 
             return loadFragment(selectedFragment);
         });
+        Intent intent = new Intent(this, AlertServ.class);
+        startService(intent);
     }
     private boolean loadFragment(Fragment fragment) {
         if (fragment != null) {

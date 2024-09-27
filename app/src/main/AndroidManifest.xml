@@ -63,6 +63,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCsjE9FpIdfsbxYDvsKm8eTFr4aZm-skbc"/>
 
+        <service android:name=".AlertServ" />
+
+
     </application>
 
 </manifest>
